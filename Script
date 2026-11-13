@@ -88,7 +88,7 @@ UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
 UIListLayout.Padding = UDim.new(0, 12)
 
 --------------------------------------------------------------------------------
--- 1. CHỨC NĂNG CHẠY NHANH (SPEED + THANH NHẬP SỐ - FIX GIẬT 100%)
+-- 1. CHỨC NĂNG CHẠY NHANH (FIX GIẬT 100%, SIÊU MƯỢT)
 --------------------------------------------------------------------------------
 local SpeedSection = Instance.new("Frame")
 SpeedSection.Parent = Container
@@ -113,7 +113,7 @@ SpeedBox.BackgroundColor3 = Color3.fromRGB(35, 35, 50)
 SpeedBox.Position = UDim2.new(0, 12, 0, 35)
 SpeedBox.Size = UDim2.new(1, -24, 0, 30)
 SpeedBox.Font = Enum.Font.Gotham
-SpeedBox.Text = "16" -- Tốc độ mặc định Roblox
+SpeedBox.Text = "16"
 SpeedBox.TextColor3 = Color3.fromRGB(0, 255, 204)
 SpeedBox.TextSize = 12
 Instance.new("UICorner", SpeedBox).CornerRadius = UDim.new(0, 6)
@@ -121,14 +121,18 @@ Instance.new("UICorner", SpeedBox).CornerRadius = UDim.new(0, 6)
 local customSpeed = 16
 SpeedBox.FocusLost:Connect(function()
     local val = tonumber(SpeedBox.Text)
-    if val then customSpeed = val else SpeedBox.Text = tostring(customSpeed) end
+    if val and val > 0 then customSpeed = val else SpeedBox.Text = tostring(customSpeed) end
 end)
 
-RunService.RenderStepped:Connect(function()
+-- Sử dụng Heartbeat thay vì RenderStepped để giữ tốc độ siêu mượt, không bị khựng giật
+RunService.Heartbeat:Connect(function()
     pcall(function()
         local char = LocalPlayer.Character
-        if char and char:FindFirstChild("Humanoid") then
-            char.Humanoid.WalkSpeed = customSpeed
+        if char then
+            local hum = char:FindFirstChild("Humanoid")
+            if hum then
+                hum.WalkSpeed = customSpeed
+            end
         end
     end)
 end)
@@ -176,7 +180,7 @@ RunService.Stepped:Connect(function()
 end)
 
 --------------------------------------------------------------------------------
--- 3. CHỨC NĂNG AIMBOT (GHIM ĐẦU KHI BẮN TRÚNG)
+-- 3. AIMBOT ĐÚNG CHUẨN (KHÔNG BẮN KHÔNG GHIM - BẮN MỚI TỰ ĐỘNG DÍ VÀO ĐẦU)
 --------------------------------------------------------------------------------
 local AimbotSection = Instance.new("Frame")
 AimbotSection.Parent = Container
@@ -202,34 +206,41 @@ AimbotBtn.MouseButton1Click:Connect(function()
     AimbotBtn.Text = aimbotActive and "🎯 Aimbot Ghim Đầu: ĐANG BẬT" or "🎯 Aimbot Ghim Đầu: ĐANG TẮT"
 end)
 
--- Thuật toán tìm mục tiêu gần nhất ghim thẳng lên đầu khi bắn
 RunService.RenderStepped:Connect(function()
     if not aimbotActive then return end
     pcall(function()
-        if UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton2) or UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton1) then
-            local nearestTarget = nil
-            local shortestDist = math.huge
-            
-            for _, p in ipairs(Players:GetPlayers()) do
-                if p ~= LocalPlayer and p.Character and p.Character:FindFirstChild("Head") and p.Character:FindFirstChild("Humanoid") then
-                    if p.Character.Humanoid.Health > 0 then
-                        local head = p.Character.Head
-                        local screenPoint, onScreen = Camera:WorldToViewportPoint(head.Position)
-                        if onScreen then
-                            local mousePos = UserInputService:GetMouseLocation()
-                            local dist = (Vector2.new(screenPoint.X, screenPoint.Y) - mousePos).Magnitude
-                            if dist < shortestDist then
-                                shortestDist = dist
-                                nearestTarget = head
-                            end
+        -- Kiểm tra xem người chơi có đang bấm nút bắn (Chuột trái hoặc Chuột phải) hay không
+        local isFiring = UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton1) 
+                      or UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton2)
+        
+        -- Nếu KHÔNG bắn thì hoàn toàn không ghim gì cả, để camera tự do
+        if not isFiring then return end
+
+        -- Khi BẮN: Lập tức quét và tìm người chơi gần tâm bắn nhất mà game đang ghim
+        local nearestTarget = nil
+        local shortestDist = math.huge
+        local screenCenter = Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y / 2)
+        
+        for _, p in ipairs(Players:GetPlayers()) do
+            if p ~= LocalPlayer and p.Character and p.Character:FindFirstChild("Head") and p.Character:FindFirstChild("Humanoid") then
+                if p.Character.Humanoid.Health > 0 then
+                    local head = p.Character.Head
+                    local screenPoint, onScreen = Camera:WorldToViewportPoint(head.Position)
+                    if onScreen then
+                        local dist = (Vector2.new(screenPoint.X, screenPoint.Y) - screenCenter).Magnitude
+                        -- Giới hạn tầm ngắm trong vòng tròn tâm bắn
+                        if dist < shortestDist and dist < 250 then
+                            shortestDist = dist
+                            nearestTarget = head
                         end
                     end
                 end
             end
-            
-            if nearestTarget then
-                Camera.CFrame = CFrame.new(Camera.CFrame.Position, nearestTarget.Position)
-            end
+        end
+        
+        -- Khóa thẳng tâm camera vào đầu mục tiêu ngay lập tức
+        if nearestTarget then
+            Camera.CFrame = CFrame.new(Camera.CFrame.Position, nearestTarget.Position)
         end
     end)
 end)
@@ -305,7 +316,7 @@ RunService.RenderStepped:Connect(function()
 end)
 
 --------------------------------------------------------------------------------
--- 5. DANH SÁCH SERVER & DỊCH CHUYỂN (CÓ AVATAR, TÊN TRÊN, ID DƯỚI, NÚT RESET VÀ TELE)
+-- 5. DANH SÁCH SERVER & DỊCH CHUYỂN (CÓ AVATAR, TÊN TRÊN, ID DƯỚI, NÚT RESET & TELE)
 --------------------------------------------------------------------------------
 local TeleVipSection = Instance.new("Frame")
 TeleVipSection.Parent = Container
