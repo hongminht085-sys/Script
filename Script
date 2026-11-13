@@ -1,4 +1,4 @@
--- Kiểm tra môi trường Executor
+-- Kiểm tra môi trường Executor trên Điện Thoại
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local CoreGui = game:GetService("CoreGui")
@@ -7,39 +7,35 @@ local Camera = workspace.CurrentCamera
 local LocalPlayer = Players.LocalPlayer
 
 -- Xóa menu cũ nếu chạy lại script tránh chồng chéo
-if CoreGui:FindFirstChild("DeltaVipMenu") then
-    CoreGui.DeltaVipMenu:Destroy()
+if CoreGui:FindFirstChild("DeltaMobileVipMenuV2") then
+    CoreGui.DeltaMobileVipMenuV2:Destroy()
 end
 
--- Khởi tạo UI Menu chính (Siêu đẹp, hiện đại)
+-- Khởi tạo UI Menu chính
 local ScreenGui = Instance.new("ScreenGui")
-ScreenGui.Name = "DeltaVipMenu"
+ScreenGui.Name = "DeltaMobileVipMenuV2"
 ScreenGui.Parent = CoreGui
 ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
 local MainFrame = Instance.new("Frame")
 MainFrame.Name = "MainFrame"
 MainFrame.Parent = ScreenGui
-MainFrame.BackgroundColor3 = Color3.fromRGB(18, 18, 24)
+MainFrame.BackgroundColor3 = Color3.fromRGB(16, 16, 22)
 MainFrame.Position = UDim2.new(0.5, -225, 0.5, -210)
 MainFrame.Size = UDim2.new(0, 450, 0, 420)
 MainFrame.BorderSizePixel = 0
 MainFrame.Active = true
 MainFrame.Draggable = true
 
-local UICorner = Instance.new("UICorner")
-UICorner.CornerRadius = UDim.new(0, 12)
-UICorner.Parent = MainFrame
-
-local UIStroke = Instance.new("UIStroke")
-UIStroke.Parent = MainFrame
-UIStroke.Color = Color3.fromRGB(0, 255, 204)
+Instance.new("UICorner", MainFrame).CornerRadius = UDim.new(0, 12)
+local UIStroke = Instance.new("UIStroke", MainFrame)
+UIStroke.Color = Color3.fromRGB(0, 255, 170)
 UIStroke.Thickness = 1.5
 
 -- Tiêu đề Menu
 local TitleBar = Instance.new("Frame")
 TitleBar.Parent = MainFrame
-TitleBar.BackgroundColor3 = Color3.fromRGB(25, 25, 35)
+TitleBar.BackgroundColor3 = Color3.fromRGB(24, 24, 34)
 TitleBar.Size = UDim2.new(1, 0, 0, 40)
 TitleBar.BorderSizePixel = 0
 Instance.new("UICorner", TitleBar).CornerRadius = UDim.new(0, 12)
@@ -50,20 +46,20 @@ TitleText.BackgroundTransparency = 1
 TitleText.Position = UDim2.new(0, 15, 0, 0)
 TitleText.Size = UDim2.new(1, -30, 1, 0)
 TitleText.Font = Enum.Font.GothamBold
-TitleText.Text = "⚡ DELTA X - ULTIMATE VIP MENU ⚡"
-TitleText.TextColor3 = Color3.fromRGB(0, 255, 204)
+TitleText.Text = "⚡ DELTA X - MOBILE VIP MENU (V2) ⚡"
+TitleText.TextColor3 = Color3.fromRGB(0, 255, 170)
 TitleText.TextSize = 14
 TitleText.TextXAlignment = Enum.TextXAlignment.Left
 
 -- Nút thu nhỏ/mở menu nhanh
 local ToggleButton = Instance.new("TextButton")
 ToggleButton.Parent = ScreenGui
-ToggleButton.BackgroundColor3 = Color3.fromRGB(30, 30, 45)
-ToggleButton.Position = UDim2.new(0, 20, 0.5, -25)
+ToggleButton.BackgroundColor3 = Color3.fromRGB(25, 25, 38)
+ToggleButton.Position = UDim2.new(0, 20, 0.45, 0)
 ToggleButton.Size = UDim2.new(0, 50, 0, 50)
 ToggleButton.Font = Enum.Font.GothamBold
 ToggleButton.Text = "MENU"
-ToggleButton.TextColor3 = Color3.fromRGB(0, 255, 204)
+ToggleButton.TextColor3 = Color3.fromRGB(0, 255, 170)
 ToggleButton.TextSize = 12
 ToggleButton.Active = true
 ToggleButton.Draggable = true
@@ -79,7 +75,7 @@ Container.Parent = MainFrame
 Container.BackgroundTransparency = 1
 Container.Position = UDim2.new(0, 15, 0, 50)
 Container.Size = UDim2.new(1, -30, 1, -60)
-Container.CanvasSize = UDim2.new(0, 0, 2.3, 0)
+Container.CanvasSize = UDim2.new(0, 0, 2.5, 0)
 Container.ScrollBarThickness = 4
 
 local UIListLayout = Instance.new("UIListLayout")
@@ -87,12 +83,26 @@ UIListLayout.Parent = Container
 UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
 UIListLayout.Padding = UDim.new(0, 12)
 
+local function createToggleBtn(parent, text, pos, size)
+    local btn = Instance.new("TextButton")
+    btn.Parent = parent
+    btn.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
+    btn.Position = pos
+    btn.Size = size
+    btn.Font = Enum.Font.GothamBold
+    btn.Text = text .. ": ĐANG TẮT"
+    btn.TextColor3 = Color3.fromRGB(255, 255, 255)
+    btn.TextSize = 11
+    Instance.new("UICorner", btn).CornerRadius = UDim.new(0, 6)
+    return btn
+end
+
 --------------------------------------------------------------------------------
--- 1. CHỨC NĂNG CHẠY NHANH (FIX GIẬT 100%, SIÊU MƯỢT)
+-- 1. CHỨC NĂNG CHẠY NHANH (MƯỢT MÀ, KHÔNG GIẬT BẰNG HEARTBEAT)
 --------------------------------------------------------------------------------
 local SpeedSection = Instance.new("Frame")
 SpeedSection.Parent = Container
-SpeedSection.BackgroundColor3 = Color3.fromRGB(25, 25, 35)
+SpeedSection.BackgroundColor3 = Color3.fromRGB(22, 22, 30)
 SpeedSection.Size = UDim2.new(1, 0, 0, 75)
 Instance.new("UICorner", SpeedSection).CornerRadius = UDim.new(0, 8)
 
@@ -102,19 +112,19 @@ SText.BackgroundTransparency = 1
 SText.Position = UDim2.new(0, 12, 0, 8)
 SText.Size = UDim2.new(1, -24, 0, 20)
 SText.Font = Enum.Font.GothamBold
-SText.Text = "🏃 Tốc độ chạy (Speed Walk)"
+SText.Text = "🏃 Tốc độ chạy (Không giật lag)"
 SText.TextColor3 = Color3.fromRGB(255, 255, 255)
-SText.TextSize = 13
+SText.TextSize = 12
 SText.TextXAlignment = Enum.TextXAlignment.Left
 
 local SpeedBox = Instance.new("TextBox")
 SpeedBox.Parent = SpeedSection
-SpeedBox.BackgroundColor3 = Color3.fromRGB(35, 35, 50)
-SpeedBox.Position = UDim2.new(0, 12, 0, 35)
+SpeedBox.BackgroundColor3 = Color3.fromRGB(32, 32, 46)
+SpeedBox.Position = UDim2.new(0, 12, 0, 32)
 SpeedBox.Size = UDim2.new(1, -24, 0, 30)
 SpeedBox.Font = Enum.Font.Gotham
 SpeedBox.Text = "16"
-SpeedBox.TextColor3 = Color3.fromRGB(0, 255, 204)
+SpeedBox.TextColor3 = Color3.fromRGB(0, 255, 170)
 SpeedBox.TextSize = 12
 Instance.new("UICorner", SpeedBox).CornerRadius = UDim.new(0, 6)
 
@@ -124,7 +134,6 @@ SpeedBox.FocusLost:Connect(function()
     if val and val > 0 then customSpeed = val else SpeedBox.Text = tostring(customSpeed) end
 end)
 
--- Sử dụng Heartbeat thay vì RenderStepped để giữ tốc độ siêu mượt, không bị khựng giật
 RunService.Heartbeat:Connect(function()
     pcall(function()
         local char = LocalPlayer.Character
@@ -138,30 +147,21 @@ RunService.Heartbeat:Connect(function()
 end)
 
 --------------------------------------------------------------------------------
--- 2. CHỨC NĂNG XUYÊN TƯỜNG (NOCLIP KỂ CẢ NHẢY VÀ NGỒI)
+-- 2. CHỨC NĂNG XUYÊN TƯỜNG (NOCLIP)
 --------------------------------------------------------------------------------
 local NoclipSection = Instance.new("Frame")
 NoclipSection.Parent = Container
-NoclipSection.BackgroundColor3 = Color3.fromRGB(25, 25, 35)
+NoclipSection.BackgroundColor3 = Color3.fromRGB(22, 22, 30)
 NoclipSection.Size = UDim2.new(1, 0, 0, 50)
 Instance.new("UICorner", NoclipSection).CornerRadius = UDim.new(0, 8)
 
-local NoclipBtn = Instance.new("TextButton")
-NoclipBtn.Parent = NoclipSection
-NoclipBtn.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
-NoclipBtn.Position = UDim2.new(0, 12, 0, 10)
-NoclipBtn.Size = UDim2.new(1, -24, 0, 30)
-NoclipBtn.Font = Enum.Font.GothamBold
-NoclipBtn.Text = "👻 Xuyên Tường (Noclip): ĐANG TẮT"
-NoclipBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-NoclipBtn.TextSize = 12
-Instance.new("UICorner", NoclipBtn).CornerRadius = UDim.new(0, 6)
-
 local noclipActive = false
+local NoclipBtn = createToggleBtn(NoclipSection, "👻 Xuyên Tường (Nhảy & Ngồi)", UDim2.new(0, 12, 0, 10), UDim2.new(1, -24, 0, 30))
+
 NoclipBtn.MouseButton1Click:Connect(function()
     noclipActive = not noclipActive
-    NoclipBtn.BackgroundColor3 = noclipActive and Color3.fromRGB(50, 200, 100) or Color3.fromRGB(200, 50, 50)
-    NoclipBtn.Text = noclipActive and "👻 Xuyên Tường (Noclip): ĐANG BẬT" or "👻 Xuyên Tường (Noclip): ĐANG TẮT"
+    NoclipBtn.BackgroundColor3 = noclipActive and Color3.fromRGB(45, 185, 95) or Color3.fromRGB(200, 50, 50)
+    NoclipBtn.Text = noclipActive and "👻 Xuyên Tường: ĐANG BẬT" or "👻 Xuyên Tường: ĐANG TẮT"
 end)
 
 RunService.Stepped:Connect(function()
@@ -170,9 +170,7 @@ RunService.Stepped:Connect(function()
             local char = LocalPlayer.Character
             if char then
                 for _, part in ipairs(char:GetDescendants()) do
-                    if part:IsA("BasePart") then
-                        part.CanCollide = false
-                    end
+                    if part:IsA("BasePart") then part.CanCollide = false end
                 end
             end
         end)
@@ -180,46 +178,100 @@ RunService.Stepped:Connect(function()
 end)
 
 --------------------------------------------------------------------------------
--- 3. AIMBOT ĐÚNG CHUẨN (KHÔNG BẮN KHÔNG GHIM - BẮN MỚI TỰ ĐỘNG DÍ VÀO ĐẦU)
+-- 3. AIMBOT VÒNG TRÒN FOV + XÁC ĐỊNH CHUẨN XÁC KHI SÚNG RA ĐẠN (TOOL.ACTIVATED)
 --------------------------------------------------------------------------------
 local AimbotSection = Instance.new("Frame")
 AimbotSection.Parent = Container
-AimbotSection.BackgroundColor3 = Color3.fromRGB(25, 25, 35)
-AimbotSection.Size = UDim2.new(1, 0, 0, 50)
+AimbotSection.BackgroundColor3 = Color3.fromRGB(22, 22, 30)
+AimbotSection.Size = UDim2.new(1, 0, 0, 110)
 Instance.new("UICorner", AimbotSection).CornerRadius = UDim.new(0, 8)
 
-local AimbotBtn = Instance.new("TextButton")
-AimbotBtn.Parent = AimbotSection
-AimbotBtn.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
-AimbotBtn.Position = UDim2.new(0, 12, 0, 10)
-AimbotBtn.Size = UDim2.new(1, -24, 0, 30)
-AimbotBtn.Font = Enum.Font.GothamBold
-AimbotBtn.Text = "🎯 Aimbot Ghim Đầu: ĐANG TẮT"
-AimbotBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-AimbotBtn.TextSize = 12
-Instance.new("UICorner", AimbotBtn).CornerRadius = UDim.new(0, 6)
-
 local aimbotActive = false
+local AimbotBtn = createToggleBtn(AimbotSection, "🎯 Aimbot Theo Cơ Chế Ra Đạn", UDim2.new(0, 12, 0, 10), UDim2.new(1, -24, 0, 28))
+
 AimbotBtn.MouseButton1Click:Connect(function()
     aimbotActive = not aimbotActive
-    AimbotBtn.BackgroundColor3 = aimbotActive and Color3.fromRGB(50, 200, 100) or Color3.fromRGB(200, 50, 50)
-    AimbotBtn.Text = aimbotActive and "🎯 Aimbot Ghim Đầu: ĐANG BẬT" or "🎯 Aimbot Ghim Đầu: ĐANG TẮT"
+    AimbotBtn.BackgroundColor3 = aimbotActive and Color3.fromRGB(45, 185, 95) or Color3.fromRGB(200, 50, 50)
+    AimbotBtn.Text = aimbotActive and "🎯 Aimbot Theo Cơ Chế Ra Đạn: ĐANG BẬT" or "🎯 Aimbot Theo Cơ Chế Ra Đạn: ĐANG TẮT"
 end)
 
-RunService.RenderStepped:Connect(function()
-    if not aimbotActive then return end
-    pcall(function()
-        -- Kiểm tra xem người chơi có đang bấm nút bắn (Chuột trái hoặc Chuột phải) hay không
-        local isFiring = UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton1) 
-                      or UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton2)
-        
-        -- Nếu KHÔNG bắn thì hoàn toàn không ghim gì cả, để camera tự do
-        if not isFiring then return end
+local FOVBox = Instance.new("TextBox")
+FOVBox.Parent = AimbotSection
+FOVBox.BackgroundColor3 = Color3.fromRGB(32, 32, 46)
+FOVBox.Position = UDim2.new(0, 12, 0, 46)
+FOVBox.Size = UDim2.new(1, -24, 0, 28)
+FOVBox.Font = Enum.Font.Gotham
+FOVBox.Text = "Bán kính vòng tròn FOV: 150"
+FOVBox.TextColor3 = Color3.fromRGB(0, 255, 170)
+FOVBox.TextSize = 11
+Instance.new("UICorner", FOVBox).CornerRadius = UDim.new(0, 6)
 
-        -- Khi BẮN: Lập tức quét và tìm người chơi gần tâm bắn nhất mà game đang ghim
-        local nearestTarget = nil
-        local shortestDist = math.huge
+local fovRadius = 150
+FOVBox.FocusLost:Connect(function()
+    local val = tonumber(FOVBox.Text:match("%d+"))
+    if val then fovRadius = val FOVBox.Text = "Bán kính vòng tròn FOV: " .. val else FOVBox.Text = "Bán kính vòng tròn FOV: " .. fovRadius end
+end)
+
+-- Vẽ vòng tròn FOV quanh tâm màn hình
+local fovCircle = Drawing.new("Circle")
+fovCircle.Thickness = 1.5
+fovCircle.NumSides = 64
+fovCircle.Radius = fovRadius
+fovCircle.Filled = false
+fovCircle.Color = Color3.fromRGB(0, 255, 170)
+fovCircle.Visible = false
+
+-- Theo dõi chính xác thời điểm súng ra đạn (Tool.Activated)
+local isShooting = false
+local connectionTool = nil
+
+local function hookWeapon(char)
+    if connectionTool then connectionTool:Disconnect() end
+    local tool = char:FindFirstChildOfClass("Tool")
+    if tool then
+        connectionTool = tool.Activated:Connect(function()
+            isShooting = true
+            task.delay(0.15, function() -- Giữ ghim trong khoảnh khắc viên đạn bay ra
+                isShooting = false
+            end)
+        end)
+    end
+end
+
+LocalPlayer.CharacterAdded:Connect(function(char)
+    char.ChildAdded:Connect(function(child)
+        if child:IsA("Tool") then
+            hookWeapon(char)
+        end
+    end)
+end)
+
+if LocalPlayer.Character then
+    hookWeapon(LocalPlayer.Character)
+    LocalPlayer.Character.ChildAdded:Connect(function(child)
+        if child:IsA("Tool") then
+            hookWeapon(LocalPlayer.Character)
+        end
+    end)
+end
+
+RunService.RenderStepped:Connect(function()
+    pcall(function()
         local screenCenter = Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y / 2)
+        
+        if aimbotActive then
+            fovCircle.Visible = true
+            fovCircle.Radius = fovRadius
+            fovCircle.Position = screenCenter
+        else
+            fovCircle.Visible = false
+        end
+
+        -- Nếu chưa bật aimbot hoặc súng chưa phát lệnh ra đạn thì không ghim
+        if not aimbotActive or not isShooting then return end
+
+        local nearestTarget = nil
+        local shortestDist = fovRadius
         
         for _, p in ipairs(Players:GetPlayers()) do
             if p ~= LocalPlayer and p.Character and p.Character:FindFirstChild("Head") and p.Character:FindFirstChild("Humanoid") then
@@ -228,8 +280,7 @@ RunService.RenderStepped:Connect(function()
                     local screenPoint, onScreen = Camera:WorldToViewportPoint(head.Position)
                     if onScreen then
                         local dist = (Vector2.new(screenPoint.X, screenPoint.Y) - screenCenter).Magnitude
-                        -- Giới hạn tầm ngắm trong vòng tròn tâm bắn
-                        if dist < shortestDist and dist < 250 then
+                        if dist < shortestDist then
                             shortestDist = dist
                             nearestTarget = head
                         end
@@ -238,7 +289,6 @@ RunService.RenderStepped:Connect(function()
             end
         end
         
-        -- Khóa thẳng tâm camera vào đầu mục tiêu ngay lập tức
         if nearestTarget then
             Camera.CFrame = CFrame.new(Camera.CFrame.Position, nearestTarget.Position)
         end
@@ -246,30 +296,21 @@ RunService.RenderStepped:Connect(function()
 end)
 
 --------------------------------------------------------------------------------
--- 4. CHỨC NĂNG ESP (TÊN, VỊ TRÍ)
+-- 4. CHỨC NĂNG ESP (HIỂN THỊ TÊN + KHOẢNG CÁCH)
 --------------------------------------------------------------------------------
 local ESPSection = Instance.new("Frame")
 ESPSection.Parent = Container
-ESPSection.BackgroundColor3 = Color3.fromRGB(25, 25, 35)
+ESPSection.BackgroundColor3 = Color3.fromRGB(22, 22, 30)
 ESPSection.Size = UDim2.new(1, 0, 0, 50)
 Instance.new("UICorner", ESPSection).CornerRadius = UDim.new(0, 8)
 
-local ESPBtn = Instance.new("TextButton")
-ESPBtn.Parent = ESPSection
-ESPBtn.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
-ESPBtn.Position = UDim2.new(0, 12, 0, 10)
-ESPBtn.Size = UDim2.new(1, -24, 0, 30)
-ESPBtn.Font = Enum.Font.GothamBold
-ESPBtn.Text = "👁️ ESP (Tên, Vị trí): Đang Tắt"
-ESPBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-ESPBtn.TextSize = 11
-Instance.new("UICorner", ESPBtn).CornerRadius = UDim.new(0, 6)
-
 local espActive = false
+local ESPBtn = createToggleBtn(ESPSection, "👁️ ESP (Tên + Khoảng Cách)", UDim2.new(0, 12, 0, 10), UDim2.new(1, -24, 0, 30))
+
 ESPBtn.MouseButton1Click:Connect(function()
     espActive = not espActive
-    ESPBtn.BackgroundColor3 = espActive and Color3.fromRGB(50, 200, 100) or Color3.fromRGB(200, 50, 50)
-    ESPBtn.Text = espActive and "👁️ ESP (Tên, Vị trí): Đang Bật" or "👁️ ESP (Tên, Vị trí): Đang Tắt"
+    ESPBtn.BackgroundColor3 = espActive and Color3.fromRGB(45, 185, 95) or Color3.fromRGB(200, 50, 50)
+    ESPBtn.Text = espActive and "👁️ ESP (Tên + Khoảng Cách): ĐANG BẬT" or "👁️ ESP (Tên + Khoảng Cách): ĐANG TẮT"
 end)
 
 RunService.RenderStepped:Connect(function()
@@ -280,11 +321,11 @@ RunService.RenderStepped:Connect(function()
             local head = char:FindFirstChild("Head")
             
             if espActive then
-                if not char:FindFirstChild("VipESP_Tag") then
+                if not char:FindFirstChild("MobileVipESPV2") then
                     local bill = Instance.new("BillboardGui")
-                    bill.Name = "VipESP_Tag"
+                    bill.Name = "MobileVipESPV2"
                     bill.AlwaysOnTop = true
-                    bill.Size = UDim2.new(0, 200, 0, 50)
+                    bill.Size = UDim2.new(0, 200, 0, 40)
                     bill.StudsOffset = Vector3.new(0, 2.5, 0)
                     
                     local txt = Instance.new("TextLabel")
@@ -294,21 +335,21 @@ RunService.RenderStepped:Connect(function()
                     txt.Size = UDim2.new(1, 0, 1, 0)
                     txt.Font = Enum.Font.GothamBold
                     txt.TextSize = 12
-                    txt.TextColor3 = Color3.fromRGB(0, 255, 204)
-                    txt.TextStrokeTransparency = 0.5
+                    txt.TextColor3 = Color3.fromRGB(0, 255, 170)
+                    txt.TextStrokeTransparency = 0.4
                     
                     bill.Parent = char
                 else
-                    local bill = char:FindFirstChild("VipESP_Tag")
+                    local bill = char:FindFirstChild("MobileVipESPV2")
                     local txt = bill:FindFirstChild("Info")
-                    if txt and head then
+                    if txt and head and LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
                         local dist = math.floor((root.Position - LocalPlayer.Character.HumanoidRootPart.Position).Magnitude)
-                        txt.Text = p.Name .. "\n[Cách: " .. dist .. "m]"
+                        txt.Text = "👤 " .. p.Name .. " [" .. dist .. "m]"
                     end
                 end
             else
-                if char:FindFirstChild("VipESP_Tag") then
-                    char.VipESP_Tag:Destroy()
+                if char:FindFirstChild("MobileVipESPV2") then
+                    char.MobileVipESPV2:Destroy()
                 end
             end
         end
@@ -316,83 +357,64 @@ RunService.RenderStepped:Connect(function()
 end)
 
 --------------------------------------------------------------------------------
--- 5. DANH SÁCH SERVER & DỊCH CHUYỂN (CÓ AVATAR, TÊN TRÊN, ID DƯỚI, NÚT RESET & TELE)
+-- 5. DANH SÁCH SERVER & DỊCH CHUYỂN (TELEVIP)
 --------------------------------------------------------------------------------
-local TeleVipSection = Instance.new("Frame")
-TeleVipSection.Parent = Container
-TeleVipSection.BackgroundColor3 = Color3.fromRGB(25, 25, 35)
-TeleVipSection.Size = UDim2.new(1, 0, 0, 230)
-Instance.new("UICorner", TeleVipSection).CornerRadius = UDim.new(0, 8)
+local ListSection = Instance.new("Frame")
+ListSection.Parent = Container
+ListSection.BackgroundColor3 = Color3.fromRGB(22, 22, 30)
+ListSection.Size = UDim2.new(1, 0, 0, 220)
+Instance.new("UICorner", ListSection).CornerRadius = UDim.new(0, 8)
 
-local TVTitle = Instance.new("TextLabel")
-TVTitle.Parent = TeleVipSection
-TVTitle.BackgroundTransparency = 1
-TVTitle.Position = UDim2.new(0, 12, 0, 8)
-TVTitle.Size = UDim2.new(1, -24, 0, 20)
-TVTitle.Font = Enum.Font.GothamBold
-TVTitle.Text = "🎯 Danh Sách Server & Dịch Chuyển"
-TVTitle.TextColor3 = Color3.fromRGB(0, 255, 204)
-TVTitle.TextSize = 13
-TVTitle.TextXAlignment = Enum.TextXAlignment.Left
-
--- Nút Reset / Cập nhật danh sách (Vào / Out)
 local ResetBtn = Instance.new("TextButton")
-ResetBtn.Parent = TeleVipSection
+ResetBtn.Parent = ListSection
 ResetBtn.BackgroundColor3 = Color3.fromRGB(0, 150, 136)
-ResetBtn.Position = UDim2.new(0, 12, 0, 32)
-ResetBtn.Size = UDim2.new(0.48, 0, 0, 26)
+ResetBtn.Position = UDim2.new(0, 12, 0, 10)
+ResetBtn.Size = UDim2.new(0.48, 0, 0, 28)
 ResetBtn.Font = Enum.Font.GothamBold
 ResetBtn.Text = "🔄 Cập Nhật Server"
 ResetBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
 ResetBtn.TextSize = 11
-Instance.new("UICorner", ResetBtn).CornerRadius = UDim.new(0, 5)
+Instance.new("UICorner", ResetBtn).CornerRadius = UDim.new(0, 6)
 
--- Nút Teleport đến người được chọn
-local TeleportBtn = Instance.new("TextButton")
-TeleportBtn.Parent = TeleVipSection
-TeleportBtn.BackgroundColor3 = Color3.fromRGB(0, 120, 255)
-TeleportBtn.Position = UDim2.new(0.52, 0, 0, 32)
-TeleportBtn.Size = UDim2.new(0.48, -12, 0, 26)
-TeleportBtn.Font = Enum.Font.GothamBold
-TeleportBtn.Text = "🚀 Dịch Chuyển"
-TeleportBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-TeleportBtn.TextSize = 11
-Instance.new("UICorner", TeleportBtn).CornerRadius = UDim.new(0, 5)
+local TeleBtn = Instance.new("TextButton")
+TeleBtn.Parent = ListSection
+TeleBtn.BackgroundColor3 = Color3.fromRGB(0, 120, 255)
+TeleBtn.Position = UDim2.new(0.51, 0, 0, 10)
+TeleBtn.Size = UDim2.new(0.49, -12, 0, 28)
+TeleBtn.Font = Enum.Font.GothamBold
+TeleBtn.Text = "🚀 Dịch Chuyển"
+TeleBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+TeleBtn.TextSize = 11
+Instance.new("UICorner", TeleBtn).CornerRadius = UDim.new(0, 6)
 
--- Danh sách người chơi
 local PlayerScroll = Instance.new("ScrollingFrame")
-PlayerScroll.Parent = TeleVipSection
+PlayerScroll.Parent = ListSection
 PlayerScroll.BackgroundColor3 = Color3.fromRGB(15, 15, 22)
-PlayerScroll.Position = UDim2.new(0, 12, 0, 64)
-PlayerScroll.Size = UDim2.new(1, -24, 0, 155)
+PlayerScroll.Position = UDim2.new(0, 12, 0, 48)
+PlayerScroll.Size = UDim2.new(1, -24, 0, 158)
 PlayerScroll.CanvasSize = UDim2.new(0, 0, 0, 0)
 PlayerScroll.ScrollBarThickness = 4
 Instance.new("UICorner", PlayerScroll).CornerRadius = UDim.new(0, 6)
 
-local PlayerListLayout = Instance.new("UIListLayout")
-PlayerListLayout.Parent = PlayerScroll
-PlayerListLayout.SortOrder = Enum.SortOrder.LayoutOrder
-PlayerListLayout.Padding = UDim.new(0, 5)
+local PlayerListLayout = Instance.new("UIListLayout", PlayerScroll)
+PlayerListLayout.Padding = UDim.new(0, 4)
 
 local selectedTarget = nil
 
-local function updatePlayerList()
+local function refreshServerList()
     for _, child in ipairs(PlayerScroll:GetChildren()) do
         if child:IsA("TextButton") then child:Destroy() end
     end
-    
     for _, p in ipairs(Players:GetPlayers()) do
         if p ~= LocalPlayer then
-            local pBtn = Instance.new("TextButton")
-            pBtn.Parent = PlayerScroll
-            pBtn.BackgroundColor3 = Color3.fromRGB(30, 30, 45)
-            pBtn.Size = UDim2.new(1, 0, 0, 42)
-            pBtn.Text = ""
-            Instance.new("UICorner", pBtn).CornerRadius = UDim.new(0, 5)
+            local btn = Instance.new("TextButton")
+            btn.Parent = PlayerScroll
+            btn.BackgroundColor3 = (selectedTarget == p) and Color3.fromRGB(0, 160, 100) or Color3.fromRGB(30, 30, 42)
+            btn.Size = UDim2.new(1, 0, 0, 42)
+            btn.Text = ""
+            Instance.new("UICorner", btn).CornerRadius = UDim.new(0, 5)
             
-            -- Tên người chơi ở trên
-            local nameLbl = Instance.new("TextLabel")
-            nameLbl.Parent = pBtn
+            local nameLbl = Instance.new("TextLabel", btn)
             nameLbl.BackgroundTransparency = 1
             nameLbl.Position = UDim2.new(0, 10, 0, 4)
             nameLbl.Size = UDim2.new(1, -50, 0, 18)
@@ -402,9 +424,7 @@ local function updatePlayerList()
             nameLbl.TextSize = 12
             nameLbl.TextXAlignment = Enum.TextXAlignment.Left
             
-            -- ID Roblox nhỏ ở dưới
-            local idLbl = Instance.new("TextLabel")
-            idLbl.Parent = pBtn
+            local idLbl = Instance.new("TextLabel", btn)
             idLbl.BackgroundTransparency = 1
             idLbl.Position = UDim2.new(0, 10, 0, 20)
             idLbl.Size = UDim2.new(1, -50, 0, 16)
@@ -414,47 +434,39 @@ local function updatePlayerList()
             idLbl.TextSize = 10
             idLbl.TextXAlignment = Enum.TextXAlignment.Left
             
-            -- Ảnh đại diện (Avatar) hiển thị bên cạnh
             pcall(function()
                 local content = Players:GetUserThumbnailAsync(p.UserId, Enum.ThumbnailType.HeadShot, Enum.ThumbnailSize.Size420x420)
-                local img = Instance.new("ImageLabel")
-                img.Parent = pBtn
+                local img = Instance.new("ImageLabel", btn)
                 img.BackgroundTransparency = 1
                 img.Position = UDim2.new(1, -38, 0, 5)
                 img.Size = UDim2.new(0, 32, 0, 32)
                 img.Image = content
             end)
 
-            pBtn.MouseButton1Click:Connect(function()
+            btn.MouseButton1Click:Connect(function()
                 selectedTarget = p
                 for _, b in ipairs(PlayerScroll:GetChildren()) do
-                    if b:IsA("TextButton") then b.BackgroundColor3 = Color3.fromRGB(30, 30, 45) end
+                    if b:IsA("TextButton") then b.BackgroundColor3 = Color3.fromRGB(30, 30, 42) end
                 end
-                pBtn.BackgroundColor3 = Color3.fromRGB(0, 150, 136)
+                btn.BackgroundColor3 = Color3.fromRGB(0, 160, 100)
             end)
         end
     end
     PlayerScroll.CanvasSize = UDim2.new(0, 0, 0, #Players:GetPlayers() * 47)
 end
 
--- Tải danh sách lần đầu
-updatePlayerList()
+refreshServerList()
+ResetBtn.MouseButton1Click:Connect(refreshServerList)
 
--- Nút Reset / Cập nhật thủ công danh sách khi có người vào/ra server
-ResetBtn.MouseButton1Click:Connect(function()
-    updatePlayerList()
-end)
-
--- Sự kiện Dịch chuyển đến người chơi được chọn
-TeleportBtn.MouseButton1Click:Connect(function()
+TeleBtn.MouseButton1Click:Connect(function()
     pcall(function()
         if selectedTarget and selectedTarget.Character and selectedTarget.Character:FindFirstChild("HumanoidRootPart") then
             local myRoot = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
             if myRoot then
-                myRoot.CFrame = selectedTarget.Character.HumanoidRootPart.CFrame + Vector3.new(0, 3, 2)
+                myRoot.CFrame = selectedTarget.Character.HumanoidRootPart.CFrame * CFrame.new(0, 3, 2)
             end
         end
     end)
 end)
 
-print("Đã tải thành công Script VIP chạy trên Delta X!")
+print("Đã tải thành công Mobile VIP Script V2 trên Delta X!")
