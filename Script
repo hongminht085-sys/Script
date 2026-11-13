@@ -1,3 +1,4 @@
+
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local CoreGui = game:GetService("CoreGui")
@@ -5,14 +6,14 @@ local UserInputService = game:GetService("UserInputService")
 local Camera = workspace.CurrentCamera
 local LocalPlayer = Players.LocalPlayer
 
--- Xóa menu cũ nếu chạy lại script để tránh chồng chéo gây giật
-if CoreGui:FindFirstChild("DeltaVipFullMenu") then
-    CoreGui.DeltaVipFullMenu:Destroy()
+-- Xóa menu cũ nếu chạy lại script
+if CoreGui:FindFirstChild("DeltaVipFixMenu") then
+    CoreGui.DeltaVipFixMenu:Destroy()
 end
 
--- Khởi tạo UI Menu chính (Hỗ trợ kéo thả mượt mà)
+-- Khởi tạo UI Menu chính
 local ScreenGui = Instance.new("ScreenGui")
-ScreenGui.Name = "DeltaVipFullMenu"
+ScreenGui.Name = "DeltaVipFixMenu"
 ScreenGui.Parent = CoreGui
 ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
@@ -21,7 +22,7 @@ MainFrame.Name = "MainFrame"
 MainFrame.Parent = ScreenGui
 MainFrame.BackgroundColor3 = Color3.fromRGB(16, 16, 22)
 MainFrame.Position = UDim2.new(0.5, -210, 0.5, -190)
-MainFrame.Size = UDim2.new(0, 420, 0, 380)
+MainFrame.Size = UDim2.new(0, 420, 0, 390)
 MainFrame.BorderSizePixel = 0
 MainFrame.Active = true
 MainFrame.Draggable = true
@@ -45,7 +46,7 @@ TitleText.BackgroundTransparency = 1
 TitleText.Position = UDim2.new(0, 15, 0, 0)
 TitleText.Size = UDim2.new(1, -30, 1, 0)
 TitleText.Font = Enum.Font.GothamBold
-TitleText.Text = "⚡ DELTA X - VIP ALL-IN-ONE (FIXED) ⚡"
+TitleText.Text = "⚡ DELTA X - ULTIMATE VIP (FIXED V2) ⚡"
 TitleText.TextColor3 = Color3.fromRGB(0, 255, 170)
 TitleText.TextSize = 13
 TitleText.TextXAlignment = Enum.TextXAlignment.Left
@@ -75,7 +76,7 @@ Container.Parent = MainFrame
 Container.BackgroundTransparency = 1
 Container.Position = UDim2.new(0, 12, 0, 46)
 Container.Size = UDim2.new(1, -24, 1, -54)
-Container.CanvasSize = UDim2.new(0, 0, 0, 680)
+Container.CanvasSize = UDim2.new(0, 0, 0, 750)
 Container.ScrollBarThickness = 4
 
 local UIListLayout = Instance.new("UIListLayout")
@@ -83,7 +84,6 @@ UIListLayout.Parent = Container
 UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
 UIListLayout.Padding = UDim.new(0, 10)
 
--- Hàm hỗ trợ tạo nút bật/tắt nhanh
 local function createToggleBtn(parent, text, pos, size)
     local btn = Instance.new("TextButton")
     btn.Parent = parent
@@ -99,7 +99,7 @@ local function createToggleBtn(parent, text, pos, size)
 end
 
 --------------------------------------------------------------------------------
--- 1. CHẠY NHANH + XUYÊN TƯỜNG (KHÔI PHỤC NGUYÊN BẢN)
+-- 1. CHẠY NHANH (MƯỢT MÀ, KHÔNG GIẬT) + XUYÊN TƯỜNG (NHẢY & NGỒI)
 --------------------------------------------------------------------------------
 local MoveSection = Instance.new("Frame")
 MoveSection.Parent = Container
@@ -113,7 +113,7 @@ SpeedBox.BackgroundColor3 = Color3.fromRGB(32, 32, 46)
 SpeedBox.Position = UDim2.new(0, 10, 0, 10)
 SpeedBox.Size = UDim2.new(0.48, 0, 0, 28)
 SpeedBox.Font = Enum.Font.GothamBold
-SpeedBox.PlaceholderText = "Nhập tốc độ (VD: 50)"
+SpeedBox.PlaceholderText = "Tốc độ (VD: 50)"
 SpeedBox.Text = "16"
 SpeedBox.TextColor3 = Color3.fromRGB(0, 255, 170)
 SpeedBox.TextSize = 11
@@ -142,16 +142,16 @@ SpeedBtn.MouseButton1Click:Connect(function()
 end)
 
 local noclipActive = false
-local NoclipBtn = createToggleBtn(MoveSection, "👻 Xuyên Tường (Kể cả nhảy/ngồi)", UDim2.new(0, 10, 0, 46), UDim2.new(1, -20, 0, 28))
+local NoclipBtn = createToggleBtn(MoveSection, "👻 Xuyên Tường (Nhảy & Ngồi)", UDim2.new(0, 10, 0, 46), UDim2.new(1, -20, 0, 28))
 
 NoclipBtn.MouseButton1Click:Connect(function()
     noclipActive = not noclipActive
     NoclipBtn.BackgroundColor3 = noclipActive and Color3.fromRGB(45, 185, 95) or Color3.fromRGB(190, 45, 45)
-    NoclipBtn.Text = noclipActive and "👻 Xuyên Tường (Kể cả nhảy/ngồi): BẬT" or "👻 Xuyên Tường (Kể cả nhảy/ngồi): TẮT"
+    NoclipBtn.Text = noclipActive and "👻 Xuyên Tường (Nhảy & Ngồi): BẬT" or "👻 Xuyên Tường (Nhảy & Ngồi): TẮT"
 end)
 
 --------------------------------------------------------------------------------
--- 2. ĐẤM NHANH & BẮN NHANH (FIX TỐC ĐỘ ANIMATION + TOOL)
+-- 2. ĐẤM NHANH & BẮN NHANH (GÂY SÁT THƯƠNG THẬT & TÙY CHỈNH TỐC ĐỘ)
 --------------------------------------------------------------------------------
 local AttackSection = Instance.new("Frame")
 AttackSection.Parent = Container
@@ -165,7 +165,7 @@ PunchBox.BackgroundColor3 = Color3.fromRGB(32, 32, 46)
 PunchBox.Position = UDim2.new(0, 10, 0, 10)
 PunchBox.Size = UDim2.new(0.48, 0, 0, 28)
 PunchBox.Font = Enum.Font.Gotham
-PunchBox.Text = "Đấm: 3"
+PunchBox.Text = "Đấm Nhanh: 5"
 PunchBox.TextColor3 = Color3.fromRGB(0, 255, 170)
 PunchBox.TextSize = 11
 Instance.new("UICorner", PunchBox).CornerRadius = UDim.new(0, 6)
@@ -176,36 +176,36 @@ GunBox.BackgroundColor3 = Color3.fromRGB(32, 32, 46)
 GunBox.Position = UDim2.new(0.51, 0, 0, 10)
 GunBox.Size = UDim2.new(0.49, -10, 0, 28)
 GunBox.Font = Enum.Font.Gotham
-GunBox.Text = "Bắn: 3"
+GunBox.Text = "Bắn Nhanh: 5"
 GunBox.TextColor3 = Color3.fromRGB(0, 255, 170)
 GunBox.TextSize = 11
 Instance.new("UICorner", GunBox).CornerRadius = UDim.new(0, 6)
 
 local fastAttackActive = false
-local punchMult = 3
-local gunMult = 3
-local AttackBtn = createToggleBtn(AttackSection, "⚡ Đấm Nhanh & Bắn Nhanh", UDim2.new(0, 10, 0, 46), UDim2.new(1, -20, 0, 28))
+local punchMultiplier = 5
+local gunMultiplier = 5
+local AttackBtn = createToggleBtn(AttackSection, "⚡ Đấm & Bắn Nhanh (Gây Sát Thương Thật)", UDim2.new(0, 10, 0, 46), UDim2.new(1, -20, 0, 28))
 
 PunchBox.FocusLost:Connect(function()
     local val = tonumber(PunchBox.Text:match("%d+%.?%d*"))
-    if val then punchMult = val end
-    PunchBox.Text = "Đấm: " .. punchMult
+    if val then punchMultiplier = val end
+    PunchBox.Text = "Đấm Nhanh: " .. punchMultiplier
 end)
 
 GunBox.FocusLost:Connect(function()
     local val = tonumber(GunBox.Text:match("%d+%.?%d*"))
-    if val then gunMult = val end
-    GunBox.Text = "Bắn: " .. gunMult
+    if val then gunMultiplier = val end
+    GunBox.Text = "Bắn Nhanh: " .. gunMultiplier
 end)
 
 AttackBtn.MouseButton1Click:Connect(function()
     fastAttackActive = not fastAttackActive
     AttackBtn.BackgroundColor3 = fastAttackActive and Color3.fromRGB(45, 185, 95) or Color3.fromRGB(190, 45, 45)
-    AttackBtn.Text = fastAttackActive and "⚡ Đấm Nhanh & Bắn Nhanh: BẬT" or "⚡ Đấm Nhanh & Bắn Nhanh: TẮT"
+    AttackBtn.Text = fastAttackActive and "⚡ Đấm & Bắn Nhanh: BẬT" or "⚡ Đấm & Bắn Nhanh: TẮT"
 end)
 
 --------------------------------------------------------------------------------
--- 3. AIMBOT GHIM ĐẦU (HOẠT ĐỘNG CẢ MOBILE & PC) + CHỐNG RƠI VỰC + BẮN XUYÊN TƯỜNG
+-- 3. AIMBOT (CHỈ GHIM ĐẦU KHI NHẤN NÚT BẮN), CHỐNG RƠI VỰC THÔNG MINH & WALLBANG
 --------------------------------------------------------------------------------
 local CombatSection = Instance.new("Frame")
 CombatSection.Parent = Container
@@ -214,16 +214,16 @@ CombatSection.Size = UDim2.new(1, 0, 0, 125)
 Instance.new("UICorner", CombatSection).CornerRadius = UDim.new(0, 8)
 
 local aimbotActive = false
-local AimbotBtn = createToggleBtn(CombatSection, "🎯 Aimbot Ghim Đầu (Tự khóa khi ngắm/bắn)", UDim2.new(0, 10, 0, 10), UDim2.new(1, -20, 0, 28))
+local AimbotBtn = createToggleBtn(CombatSection, "🎯 Aimbot (Chỉ Ghim Khi Nhấn Nút Bắn)", UDim2.new(0, 10, 0, 10), UDim2.new(1, -20, 0, 28))
 
 AimbotBtn.MouseButton1Click:Connect(function()
     aimbotActive = not aimbotActive
     AimbotBtn.BackgroundColor3 = aimbotActive and Color3.fromRGB(45, 185, 95) or Color3.fromRGB(190, 45, 45)
-    AimbotBtn.Text = aimbotActive and "🎯 Aimbot Ghim Đầu: BẬT" or "🎯 Aimbot Ghim Đầu: TẮT"
+    AimbotBtn.Text = aimbotActive and "🎯 Aimbot (Chỉ Ghim Khi Bắn): BẬT" or "🎯 Aimbot: TẮT"
 end)
 
 local antiVoidActive = false
-local AntiVoidBtn = createToggleBtn(CombatSection, "🛡️ Chống Rơi Vực (Tự tele lên mặt đất)", UDim2.new(0, 10, 0, 46), UDim2.new(1, -20, 0, 28))
+local AntiVoidBtn = createToggleBtn(CombatSection, "🛡️ Chống Rơi Vực (Fix Không Kẹt Cửa Hàng)", UDim2.new(0, 10, 0, 46), UDim2.new(1, -20, 0, 28))
 
 AntiVoidBtn.MouseButton1Click:Connect(function()
     antiVoidActive = not antiVoidActive
@@ -241,7 +241,7 @@ WallbangBtn.MouseButton1Click:Connect(function()
 end)
 
 --------------------------------------------------------------------------------
--- 4. ESP KIỂU FREE FIRE (CÓ TIA LINE + TÊN + KHOẢNG CÁCH)
+-- 4. ESP (TÊN + KHOẢNG CÁCH)
 --------------------------------------------------------------------------------
 local ESPSection = Instance.new("Frame")
 ESPSection.Parent = Container
@@ -250,35 +250,27 @@ ESPSection.Size = UDim2.new(1, 0, 0, 48)
 Instance.new("UICorner", ESPSection).CornerRadius = UDim.new(0, 8)
 
 local espActive = false
-local ESPBtn = createToggleBtn(ESPSection, "👁️ ESP Free Fire (Tia Line + Tên + Vị trí)", UDim2.new(0, 10, 0, 10), UDim2.new(1, -20, 0, 28))
+local ESPBtn = createToggleBtn(ESPSection, "👁️ ESP (Tên + Khoảng Cách)", UDim2.new(0, 10, 0, 10), UDim2.new(1, -20, 0, 28))
 
-local espLines = {} -- Lưu trữ tia Drawing Line cho từng người chơi
-
-local function removeEspForPlayer(p)
-    if espLines[p] then
-        pcall(function() espLines[p]:Remove() end)
-        espLines[p] = nil
-    end
-    if p.Character and p.Character:FindFirstChild("FF_ESP_Tag") then
-        p.Character.FF_ESP_Tag:Destroy()
+local function removeEsp(p)
+    if p.Character and p.Character:FindFirstChild("Vip_ESP") then
+        p.Character.Vip_ESP:Destroy()
     end
 end
 
-Players.PlayerRemoving:Connect(removeEspForPlayer)
+Players.PlayerRemoving:Connect(removeEsp)
 
 ESPBtn.MouseButton1Click:Connect(function()
     espActive = not espActive
     ESPBtn.BackgroundColor3 = espActive and Color3.fromRGB(45, 185, 95) or Color3.fromRGB(190, 45, 45)
-    ESPBtn.Text = espActive and "👁️ ESP Free Fire (Tia Line + Tên + Vị trí): BẬT" or "👁️ ESP Free Fire: TẮT"
+    ESPBtn.Text = espActive and "👁️ ESP (Tên + Khoảng Cách): BẬT" or "👁️ ESP: TẮT"
     if not espActive then
-        for _, p in ipairs(Players:GetPlayers()) do
-            removeEspForPlayer(p)
-        end
+        for _, p in ipairs(Players:GetPlayers()) do removeEsp(p) end
     end
 end)
 
 --------------------------------------------------------------------------------
--- 5. DANH SÁCH SERVER (CÓ NÚT CẬP NHẬT & NÚT TELE)
+-- 5. DANH SÁCH SERVER (CÓ NÚT CẬP NHẬT & TELE)
 --------------------------------------------------------------------------------
 local ListSection = Instance.new("Frame")
 ListSection.Parent = Container
@@ -366,17 +358,17 @@ TeleBtn.MouseButton1Click:Connect(function()
 end)
 
 --------------------------------------------------------------------------------
--- VÒNG LẶP XỬ LÝ TỐI ƯU HÓA (KHÔNG GIẬT LAG)
+-- VÒNG LẶP XỬ LÝ CHÍNH (ĐÃ FIX TRIỆT ĐỂ)
 --------------------------------------------------------------------------------
 local lastSafePos = Vector3.new(0, 50, 0)
 
--- Vòng lặp vật lý (Noclip & Chống rơi vực)
+-- Vòng lặp vật lý (Noclip & Chống rơi vực vào Void thực thụ)
 RunService.Stepped:Connect(function()
     pcall(function()
         local char = LocalPlayer.Character
         if not char then return end
         
-        -- Xuyên tường (kể cả nhảy và ngồi)
+        -- Xuyên tường (Nhảy & Ngồi)
         if noclipActive then
             for _, part in ipairs(char:GetDescendants()) do
                 if part:IsA("BasePart") and part.CanCollide then
@@ -385,12 +377,12 @@ RunService.Stepped:Connect(function()
             end
         end
         
-        -- Chống rơi vực
+        -- Chống rơi vực (Chỉ tele khi thực sự rơi xuống vực sâu Y < -150, không ảnh hưởng cửa hàng)
         local root = char:FindFirstChild("HumanoidRootPart")
         if root then
-            if root.Position.Y > -30 then
+            if root.Position.Y > 0 then
                 lastSafePos = root.Position
-            elseif antiVoidActive and root.Position.Y < -90 then
+            elseif antiVoidActive and root.Position.Y < -150 then
                 root.CFrame = CFrame.new(lastSafePos + Vector3.new(0, 5, 0))
                 root.Velocity = Vector3.zero
             end
@@ -398,46 +390,50 @@ RunService.Stepped:Connect(function()
     end)
 end)
 
--- Vòng lặp khung hình (Chạy nhanh, Đấm/Bắn nhanh, Aimbot, ESP Tia Line)
+-- Vòng lặp khung hình (Tốc độ, Đấm/Bắn siêu nhanh, Aimbot khi bấm bắn, ESP)
 RunService.RenderStepped:Connect(function()
     pcall(function()
         local char = LocalPlayer.Character
-        local myRoot = char and char:FindFirstChild("HumanoidRootPart")
         local hum = char and char:FindFirstChild("Humanoid")
+        local myRoot = char and char:FindFirstChild("HumanoidRootPart")
         
-        -- 1. Chạy nhanh
+        -- 1. Chạy nhanh mượt mà
         if speedActive and hum then
             hum.WalkSpeed = customSpeed
         end
         
-        -- 2. Đấm nhanh & Bắn nhanh (Tác động trực tiếp lên Animator và Tool)
-        if fastAttackActive and hum then
-            local animator = hum:FindFirstChildOfClass("Animator")
-            if animator then
-                for _, track in ipairs(animator:GetPlayingAnimationTracks()) do
-                    track:AdjustSpeed(punchMult)
-                end
-            end
+        -- 2. Đấm nhanh & Bắn nhanh (Gây sát thương thật bằng cách tăng tốc tool/remotes)
+        if fastAttackActive and char then
             local tool = char:FindFirstChildOfClass("Tool")
             if tool then
-                tool:Activate()
+                -- Kích hoạt liên tục tool để gây sát thương siêu nhanh
+                pcall(function()
+                    tool:Activate()
+                end)
                 for _, v in ipairs(tool:GetDescendants()) do
                     if v:IsA("NumberValue") or v:IsA("IntValue") then
-                        local nameLower = v.Name:lower()
-                        if nameLower:find("cooldown") or nameLower:find("firerate") or nameLower:find("delay") then
-                            v.Value = math.max(0.01, v.Value / gunMult)
+                        local n = v.Name:lower()
+                        if n:find("cooldown") or n:find("firerate") or n:find("delay") or n:find("speed") then
+                            v.Value = math.max(0.001, v.Value / math.max(1, gunMultiplier))
                         end
+                    end
+                end
+            end
+            if hum then
+                local animator = hum:FindFirstChildOfClass("Animator")
+                if animator then
+                    for _, track in ipairs(animator:GetPlayingAnimationTracks()) do
+                        track:AdjustSpeed(punchMultiplier)
                     end
                 end
             end
         end
         
-        -- 3. Aimbot Ghim Đầu (Hỗ trợ cả giữ chuột phải hoặc đang cầm vũ khí/chạm màn hình)
+        -- 3. Aimbot (Chỉ ghim thẳng vào đầu ngay khoảnh khắc nhấn nút bắn / click chuột trái)
         if aimbotActive then
-            local isAiming = UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton2) 
-                          or UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton1)
-                          or (char and char:FindFirstChildOfClass("Tool") ~= nil)
-            if isAiming then
+            local isFiring = UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton1) 
+                          or UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton2)
+            if isFiring then
                 local closestHead = nil
                 local minDist = math.huge
                 local screenCenter = Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y / 2)
@@ -464,38 +460,17 @@ RunService.RenderStepped:Connect(function()
             end
         end
         
-        -- 4. ESP Kiểu Free Fire (Vẽ tia line từ mép trên màn hình + Tên gọn gàng)
+        -- 4. ESP Tên + Khoảng cách
         if espActive then
             for _, p in ipairs(Players:GetPlayers()) do
                 if p ~= LocalPlayer and p.Character and p.Character:FindFirstChild("HumanoidRootPart") and p.Character:FindFirstChild("Head") then
                     local targetChar = p.Character
                     local targetRoot = targetChar.HumanoidRootPart
-                    local targetHead = targetChar.Head
                     
-                    -- Vẽ tia line bằng Drawing API của Delta X
-                    if Drawing then
-                        if not espLines[p] then
-                            local line = Drawing.new("Line")
-                            line.Thickness = 1.5
-                            line.Color = Color3.fromRGB(255, 60, 60)
-                            line.Transparency = 0.85
-                            espLines[p] = line
-                        end
-                        local screenPos, onScreen = Camera:WorldToViewportPoint(targetHead.Position)
-                        if onScreen then
-                            espLines[p].From = Vector2.new(Camera.ViewportSize.X / 2, 0) -- Tia kẻ từ đỉnh giữa màn hình kiểu FF
-                            espLines[p].To = Vector2.new(screenPos.X, screenPos.Y)
-                            espLines[p].Visible = true
-                        else
-                            espLines[p].Visible = false
-                        end
-                    end
-                    
-                    -- Nhãn tên + khoảng cách gọn gàng
-                    local tag = targetChar:FindFirstChild("FF_ESP_Tag")
+                    local tag = targetChar:FindFirstChild("Vip_ESP")
                     if not tag then
                         tag = Instance.new("BillboardGui")
-                        tag.Name = "FF_ESP_Tag"
+                        tag.Name = "Vip_ESP"
                         tag.AlwaysOnTop = true
                         tag.Size = UDim2.new(0, 140, 0, 30)
                         tag.StudsOffset = Vector3.new(0, 2.2, 0)
@@ -506,21 +481,21 @@ RunService.RenderStepped:Connect(function()
                         lbl.Size = UDim2.new(1, 0, 1, 0)
                         lbl.Font = Enum.Font.GothamBold
                         lbl.TextSize = 11
-                        lbl.TextColor3 = Color3.fromRGB(255, 70, 70)
+                        lbl.TextColor3 = Color3.fromRGB(0, 255, 170)
                         lbl.TextStrokeTransparency = 0.2
                         tag.Parent = targetChar
                     end
                     local dist = myRoot and math.floor((targetRoot.Position - myRoot.Position).Magnitude) or 0
                     tag.Lbl.Text = p.Name .. " [" .. dist .. "m]"
                 else
-                    removeEspForPlayer(p)
+                    removeEsp(p)
                 end
             end
         end
     end)
 end)
 
--- Bắn xuyên tường: Tắt va chạm của các vật thể cản trước mặt khi bật
+-- 5. Bắn Xuyên Tường (Wallbang)
 RunService.Heartbeat:Connect(function()
     if not wallbangActive then return end
     pcall(function()
@@ -530,7 +505,6 @@ RunService.Heartbeat:Connect(function()
         
         local result = workspace:Raycast(Camera.CFrame.Position, Camera.CFrame.LookVector * 300, rayParams)
         if result and result.Instance and result.Instance:IsA("BasePart") then
-            -- Nếu không phải nhân vật người chơi thì cho đạn xuyên qua
             if not result.Instance.Parent:FindFirstChild("Humanoid") then
                 result.Instance.CanQuery = false
             end
