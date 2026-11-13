@@ -251,7 +251,7 @@ RunService.Stepped:Connect(function()
 end)
 
 --------------------------------------------------------------------------------
--- 4. CHẤT LƯỢNG BẢO VỆ: CHẾT KHÔNG MẤT SÚNG & CẤT NHIỀU SÚNG VÀO KHO
+-- 4. BẢO VỆ SÚNG KHI CHẾT & GIỮ KHO ĐỒ
 --------------------------------------------------------------------------------
 local SafeSection = Instance.new("Frame")
 SafeSection.Parent = Container
@@ -268,7 +268,6 @@ KeepGunBtn.MouseButton1Click:Connect(function()
     KeepGunBtn.Text = keepGunActive and "🛡️ Chết Không Mất Súng & Giữ Kho: ĐANG BẬT" or "🛡️ Chết Không Mất Súng & Giữ Kho: ĐANG TẮT"
 end)
 
--- Cơ chế game ép buộc giữ lại toàn bộ súng trong Backpack/Character khi nhân vật chết
 RunService.Stepped:Connect(function()
     if not keepGunActive then return end
     pcall(function()
@@ -288,7 +287,7 @@ RunService.Stepped:Connect(function()
 end)
 
 --------------------------------------------------------------------------------
--- 5. AIMBOT GHIM ĐẦU KHI BẮN
+-- 5. AIMBOT CHUẨN XÁC (CHỈ GHIM ĐẦU KHI BẮN VIÊN ĐẦU TIÊN)
 --------------------------------------------------------------------------------
 local AimbotSection = Instance.new("Frame")
 AimbotSection.Parent = Container
@@ -297,44 +296,59 @@ AimbotSection.Size = UDim2.new(1, 0, 0, 50)
 Instance.new("UICorner", AimbotSection).CornerRadius = UDim.new(0, 8)
 
 local aimbotActive = false
-local AimbotBtn = createToggleBtn(AimbotSection, "🎯 Aimbot (Ghim đầu khi bắn)", UDim2.new(0, 12, 0, 10), UDim2.new(1, -24, 0, 30))
+local AimbotBtn = createToggleBtn(AimbotSection, "🎯 Aimbot (Chỉ ghim khi bắn)", UDim2.new(0, 12, 0, 10), UDim2.new(1, -24, 0, 30))
 
 AimbotBtn.MouseButton1Click:Connect(function()
     aimbotActive = not aimbotActive
     AimbotBtn.BackgroundColor3 = aimbotActive and Color3.fromRGB(50, 200, 100) or Color3.fromRGB(200, 50, 50)
-    AimbotBtn.Text = aimbotActive and "🎯 Aimbot (Ghim đầu khi bắn): ĐANG BẬT" or "🎯 Aimbot (Ghim đầu khi bắn): ĐANG TẮT"
+    AimbotBtn.Text = aimbotActive and "🎯 Aimbot (Chỉ ghim khi bắn): ĐANG BẬT" or "🎯 Aimbot (Chỉ ghim khi bắn): ĐANG TẮT"
 end)
 
+local lockedTarget = nil
+
 RunService.RenderStepped:Connect(function()
-    if not aimbotActive then return end
+    if not aimbotActive then 
+        lockedTarget = nil
+        return 
+    end
+    
     pcall(function()
+        -- Kiểm tra xem người chơi có đang bấm nút bắn (chuột trái hoặc chuột phải) không
         local isFiring = UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton1) 
                       or UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton2)
         
         if isFiring then
-            local nearestTarget = nil
-            local shortestDist = math.huge
-            
-            for _, p in ipairs(Players:GetPlayers()) do
-                if p ~= LocalPlayer and p.Character and p.Character:FindFirstChild("Head") and p.Character:FindFirstChild("Humanoid") then
-                    if p.Character.Humanoid.Health > 0 then
-                        local head = p.Character.Head
-                        local screenPoint, onScreen = Camera:WorldToViewportPoint(head.Position)
-                        if onScreen then
-                            local mousePos = UserInputService:GetMouseLocation()
-                            local dist = (Vector2.new(screenPoint.X, screenPoint.Y) - mousePos).Magnitude
-                            if dist < shortestDist then
-                                shortestDist = dist
-                                nearestTarget = head
+            -- Nếu chưa có mục tiêu khóa trước đó, ngay lập tức xác định người chơi gần tâm nhất khi bắt đầu bắn
+            if not lockedTarget or not lockedTarget.Parent or not lockedTarget.Parent:FindFirstChild("Humanoid") or lockedTarget.Parent.Humanoid.Health <= 0 then
+                local nearestTarget = nil
+                local shortestDist = math.huge
+                local screenCenter = Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y / 2)
+                
+                for _, p in ipairs(Players:GetPlayers()) do
+                    if p ~= LocalPlayer and p.Character and p.Character:FindFirstChild("Head") and p.Character:FindFirstChild("Humanoid") then
+                        if p.Character.Humanoid.Health > 0 then
+                            local head = p.Character.Head
+                            local screenPoint, onScreen = Camera:WorldToViewportPoint(head.Position)
+                            if onScreen then
+                                local dist = (Vector2.new(screenPoint.X, screenPoint.Y) - screenCenter).Magnitude
+                                if dist < shortestDist then
+                                    shortestDist = dist
+                                    nearestTarget = head
+                                end
                             end
                         end
                     end
                 end
+                lockedTarget = nearestTarget
             end
             
-            if nearestTarget then
-                Camera.CFrame = CFrame.new(Camera.CFrame.Position, nearestTarget.Position)
+            -- Nếu đã xác định được mục tiêu, ghim chặt tâm vào đầu người đó ngay lập tức
+            if lockedTarget then
+                Camera.CFrame = CFrame.new(Camera.CFrame.Position, lockedTarget.Position)
             end
+        else
+            -- Khi thả nút bắn ra, reset lại mục tiêu để chuẩn bị cho viên đạn tiếp theo
+            lockedTarget = nil
         end
     end)
 end)
