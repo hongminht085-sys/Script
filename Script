@@ -7,13 +7,13 @@ local Camera = workspace.CurrentCamera
 local LocalPlayer = Players.LocalPlayer
 
 -- Xóa menu cũ nếu chạy lại script tránh chồng chéo
-if CoreGui:FindFirstChild("DeltaMobileVipFinal") then
-    CoreGui.DeltaMobileVipFinal:Destroy()
+if CoreGui:FindFirstChild("DeltaMobileVipWorking") then
+    CoreGui.DeltaMobileVipWorking:Destroy()
 end
 
 -- Khởi tạo UI Menu chính
 local ScreenGui = Instance.new("ScreenGui")
-ScreenGui.Name = "DeltaMobileVipFinal"
+ScreenGui.Name = "DeltaMobileVipWorking"
 ScreenGui.Parent = CoreGui
 ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
@@ -46,9 +46,9 @@ TitleText.BackgroundTransparency = 1
 TitleText.Position = UDim2.new(0, 15, 0, 0)
 TitleText.Size = UDim2.new(1, -30, 1, 0)
 TitleText.Font = Enum.Font.GothamBold
-TitleText.Text = "⚡ DELTA X - ULTIMATE MOBILE MENU ⚡"
+TitleText.Text = "⚡ DELTA X - MOBILE VIP MENU (FINAL FIX) ⚡"
 TitleText.TextColor3 = Color3.fromRGB(0, 255, 170)
-TitleText.TextSize = 13
+TitleText.TextSize = 12
 TitleText.TextXAlignment = Enum.TextXAlignment.Left
 
 -- Nút thu nhỏ/mở menu nhanh
@@ -98,7 +98,7 @@ local function createToggleBtn(parent, text, pos, size)
 end
 
 --------------------------------------------------------------------------------
--- 1. CHỨC NĂNG CHẠY NHANH (3 MỨC NÚT BẤM - FIX GIẬT 100% & BỀN BỈ KHI RESET)
+-- 1. CHỨC NĂNG CHẠY NHANH (3 MỨC NÚT BẤM - HOẠT ĐỘNG NGAY LẬP TỨC)
 --------------------------------------------------------------------------------
 local SpeedSection = Instance.new("Frame")
 SpeedSection.Parent = Container
@@ -119,7 +119,6 @@ SText.TextXAlignment = Enum.TextXAlignment.Left
 
 local currentSpeed = 16
 
--- Tạo 3 nút tốc độ
 local btnNormal = Instance.new("TextButton", SpeedSection)
 btnNormal.Position = UDim2.new(0, 12, 0, 32)
 btnNormal.Size = UDim2.new(0.31, 0, 0, 38)
@@ -158,20 +157,20 @@ btnNormal.MouseButton1Click:Connect(function()
 end)
 
 btnFast.MouseButton1Click:Connect(function()
-    currentSpeed = 28
+    currentSpeed = 30
     btnNormal.BackgroundColor3 = Color3.fromRGB(50, 50, 65)
     btnFast.BackgroundColor3 = Color3.fromRGB(45, 185, 95)
     btnSuper.BackgroundColor3 = Color3.fromRGB(50, 50, 65)
 end)
 
 btnSuper.MouseButton1Click:Connect(function()
-    currentSpeed = 45
+    currentSpeed = 50
     btnNormal.BackgroundColor3 = Color3.fromRGB(50, 50, 65)
     btnFast.BackgroundColor3 = Color3.fromRGB(50, 50, 65)
     btnSuper.BackgroundColor3 = Color3.fromRGB(45, 185, 95)
 end)
 
--- Vòng lặp tối ưu hóa cực mượt không giật khi hồi sinh
+-- Đảm bảo áp dụng tốc độ liên tục ngay cả khi nhân vật hồi sinh
 RunService.Heartbeat:Connect(function()
     pcall(function()
         local char = LocalPlayer.Character
@@ -216,7 +215,7 @@ RunService.Stepped:Connect(function()
 end)
 
 --------------------------------------------------------------------------------
--- 3. AIMBOT VÒNG TRÒN FOV + XÁC ĐỊNH SÚNG RA ĐẠN (TOOL.ACTIVATED)
+-- 3. AIMBOT VÒNG TRÒN FOV (THEO NHỊP BẮN SÚNG)
 --------------------------------------------------------------------------------
 local AimbotSection = Instance.new("Frame")
 AimbotSection.Parent = Container
@@ -319,12 +318,12 @@ RunService.RenderStepped:Connect(function()
 end)
 
 --------------------------------------------------------------------------------
--- 4. BẢNG ESP TÙY CHỈNH RIÊNG BIỆT (TIA LINE, TÊN + SỐ NGƯỜI, HỘP BOX, THANH MÁU)
+-- 4. BẢNG ESP (TÊN + KHOẢNG CÁCH - HOẠT ĐỘNG CHUẨN XÁC 100%)
 --------------------------------------------------------------------------------
 local ESPMenuSection = Instance.new("Frame")
 ESPMenuSection.Parent = Container
 ESPMenuSection.BackgroundColor3 = Color3.fromRGB(22, 22, 30)
-ESPMenuSection.Size = UDim2.new(1, 0, 0, 160)
+ESPMenuSection.Size = UDim2.new(1, 0, 0, 80)
 Instance.new("UICorner", ESPMenuSection).CornerRadius = UDim.new(0, 8)
 
 local ESPTitle = Instance.new("TextLabel", ESPMenuSection)
@@ -332,59 +331,20 @@ ESPTitle.BackgroundTransparency = 1
 ESPTitle.Position = UDim2.new(0, 12, 0, 6)
 ESPTitle.Size = UDim2.new(1, -24, 0, 20)
 ESPTitle.Font = Enum.Font.GothamBold
-ESPTitle.Text = "👁️ Cài Đặt ESP Chi Tiết"
+ESPTitle.Text = "👁️ Cài Đặt ESP"
 ESPTitle.TextColor3 = Color3.fromRGB(0, 255, 170)
 ESPTitle.TextSize = 12
 ESPTitle.TextXAlignment = Enum.TextXAlignment.Left
 
--- 4 nút tùy chọn ESP riêng biệt
 local espMasterActive = false
-local MasterESPBtn = createToggleBtn(ESPMenuSection, "Master ESP (Tổng)", UDim2.new(0, 12, 0, 32), UDim2.new(1, -24, 0, 26))
+local MasterESPBtn = createToggleBtn(ESPMenuSection, "Bật/Tắt ESP Tên & Khoảng Cách", UDim2.new(0, 12, 0, 32), UDim2.new(1, -24, 0, 32))
 
-local lineEspActive = false
-local LineBtn = createToggleBtn(ESPMenuSection, "Tia Line (Tracer)", UDim2.new(0, 12, 0, 64), UDim2.new(0.48, 0, 0, 26))
-
-local nameEspActive = false
-local NameBtn = createToggleBtn(ESPMenuSection, "Tên & Số Người (Name/Dist)", UDim2.new(0.52, 0, 0, 64), UDim2.new(0.48, 0, 0, 26))
-
-local boxEspActive = false
-local BoxBtn = createToggleBtn(ESPMenuSection, "Hộp Box (Bounding Box)", UDim2.new(0, 12, 0, 96), UDim2.new(0.48, 0, 0, 26))
-
-local healthEspActive = false
-local HealthBtn = createToggleBtn(ESPMenuSection, "Thanh Máu (Health Bar)", UDim2.new(0.52, 0, 0, 96), UDim2.new(0.48, 0, 0, 26))
-
--- Xử lý bật/tắt nút Master ESP
 MasterESPBtn.MouseButton1Click:Connect(function()
     espMasterActive = not espMasterActive
     MasterESPBtn.BackgroundColor3 = espMasterActive and Color3.fromRGB(45, 185, 95) or Color3.fromRGB(200, 50, 50)
-    MasterESPBtn.Text = espMasterActive and "Master ESP (Tổng): BẬT" or "Master ESP (Tổng): TẮT"
+    MasterESPBtn.Text = espMasterActive and "ESP Tên & Khoảng Cách: BẬT" or "ESP Tên & Khoảng Cách: TẮT"
 end)
 
-LineBtn.MouseButton1Click:Connect(function()
-    lineEspActive = not lineEspActive
-    LineBtn.BackgroundColor3 = lineEspActive and Color3.fromRGB(45, 185, 95) or Color3.fromRGB(200, 50, 50)
-    LineBtn.Text = lineEspActive and "Tia Line: BẬT" or "Tia Line: TẮT"
-end)
-
-NameBtn.MouseButton1Click:Connect(function()
-    nameEspActive = not nameEspActive
-    NameBtn.BackgroundColor3 = nameEspActive and Color3.fromRGB(45, 185, 95) or Color3.fromRGB(200, 50, 50)
-    NameBtn.Text = nameEspActive and "Tên & Số Người: BẬT" or "Tên & Số Người: TẮT"
-end)
-
-BoxBtn.MouseButton1Click:Connect(function()
-    boxEspActive = not boxEspActive
-    BoxBtn.BackgroundColor3 = boxEspActive and Color3.fromRGB(45, 185, 95) or Color3.fromRGB(200, 50, 50)
-    BoxBtn.Text = boxEspActive and "Hộp Box: BẬT" or "Hộp Box: TẮT"
-end)
-
-HealthBtn.MouseButton1Click:Connect(function()
-    healthEspActive = not healthEspActive
-    HealthBtn.BackgroundColor3 = healthEspActive and Color3.fromRGB(45, 185, 95) or Color3.fromRGB(200, 50, 50)
-    HealthBtn.Text = healthEspActive and "Thanh Máu: BẬT" or "Thanh Máu: TẮT"
-end)
-
--- Hệ thống ESP Rendering siêu bền bỉ (Không bị mất khi reset / out ra vào lại)
 RunService.RenderStepped:Connect(function()
     for _, p in ipairs(Players:GetPlayers()) do
         if p ~= LocalPlayer and p.Character then
@@ -393,12 +353,11 @@ RunService.RenderStepped:Connect(function()
             local head = char:FindFirstChild("Head")
             local hum = char:FindFirstChild("Humanoid")
             
-            -- Quản lý Tag thông tin (Tên + Số người / Khoảng cách)
-            local tag = char:FindFirstChild("RobustESP_Tag")
-            if espMasterActive and nameEspActive and root and head and hum and hum.Health > 0 then
+            local tag = char:FindFirstChild("WorkingESP_Tag")
+            if espMasterActive and root and head and hum and hum.Health > 0 then
                 if not tag then
                     local bill = Instance.new("BillboardGui", char)
-                    bill.Name = "RobustESP_Tag"
+                    bill.Name = "WorkingESP_Tag"
                     bill.AlwaysOnTop = true
                     bill.Size = UDim2.new(0, 160, 0, 40)
                     bill.StudsOffset = Vector3.new(0, 2.8, 0)
@@ -412,7 +371,9 @@ RunService.RenderStepped:Connect(function()
                     txt.TextColor3 = Color3.fromRGB(0, 255, 170)
                     txt.TextStrokeTransparency = 0.3
                 else
-                    local dist = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and math.floor((root.Position - LocalPlayer.Character.HumanoidRootPart.Position).Magnitude) or 0
+                    local myChar = LocalPlayer.Character
+                    local myRoot = myChar and myChar:FindFirstChild("HumanoidRootPart")
+                    local dist = myRoot and math.floor((root.Position - myRoot.Position).Magnitude) or 0
                     tag.Info.Text = "👤 " .. p.Name .. " [" .. dist .. "m]"
                     tag.Enabled = true
                 end
@@ -424,7 +385,7 @@ RunService.RenderStepped:Connect(function()
 end)
 
 --------------------------------------------------------------------------------
--- 5. DANH SÁCH SERVER & DỊCH CHUYỂN (TELEVIP BỀN BỈ)
+-- 5. DANH SÁCH SERVER & DỊCH CHUYỂN (TELEVIP)
 --------------------------------------------------------------------------------
 local ListSection = Instance.new("Frame")
 ListSection.Parent = Container
@@ -524,7 +485,8 @@ ResetBtn.MouseButton1Click:Connect(refreshServerList)
 TeleBtn.MouseButton1Click:Connect(function()
     pcall(function()
         if selectedTarget and selectedTarget.Character and selectedTarget.Character:FindFirstChild("HumanoidRootPart") then
-            local myRoot = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+            local myChar = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+            local myRoot = myChar:WaitForChild("HumanoidRootPart", 2)
             if myRoot then
                 myRoot.CFrame = selectedTarget.Character.HumanoidRootPart.CFrame * CFrame.new(0, 3, 2)
             end
@@ -532,4 +494,4 @@ TeleBtn.MouseButton1Click:Connect(function()
     end)
 end)
 
-print("Đã tải thành công Mobile VIP Script Ultimate hoàn chỉnh!")
+print("Đã tải thành công Mobile VIP Script Final Working!")
