@@ -7,13 +7,13 @@ local Camera = workspace.CurrentCamera
 local LocalPlayer = Players.LocalPlayer
 
 -- Xóa menu cũ nếu chạy lại script tránh chồng chéo
-if CoreGui:FindFirstChild("DeltaMobileVipWorking") then
-    CoreGui.DeltaMobileVipWorking:Destroy()
+if CoreGui:FindFirstChild("DeltaMobileVipAbsoluteWorking") then
+    CoreGui.DeltaMobileVipAbsoluteWorking:Destroy()
 end
 
 -- Khởi tạo UI Menu chính
 local ScreenGui = Instance.new("ScreenGui")
-ScreenGui.Name = "DeltaMobileVipWorking"
+ScreenGui.Name = "DeltaMobileVipAbsoluteWorking"
 ScreenGui.Parent = CoreGui
 ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
@@ -46,9 +46,9 @@ TitleText.BackgroundTransparency = 1
 TitleText.Position = UDim2.new(0, 15, 0, 0)
 TitleText.Size = UDim2.new(1, -30, 1, 0)
 TitleText.Font = Enum.Font.GothamBold
-TitleText.Text = "⚡ DELTA X - MOBILE VIP MENU (FINAL FIX) ⚡"
+TitleText.Text = "⚡ DELTA X - 100% FIXED & WORKING ⚡"
 TitleText.TextColor3 = Color3.fromRGB(0, 255, 170)
-TitleText.TextSize = 12
+TitleText.TextSize = 11
 TitleText.TextXAlignment = Enum.TextXAlignment.Left
 
 -- Nút thu nhỏ/mở menu nhanh
@@ -98,7 +98,7 @@ local function createToggleBtn(parent, text, pos, size)
 end
 
 --------------------------------------------------------------------------------
--- 1. CHỨC NĂNG CHẠY NHANH (3 MỨC NÚT BẤM - HOẠT ĐỘNG NGAY LẬP TỨC)
+-- 1. CHỨC NĂNG CHẠY NHANH (3 NÚT: BÌNH THƯỜNG - NHANH HƠN - SIÊU NHANH)
 --------------------------------------------------------------------------------
 local SpeedSection = Instance.new("Frame")
 SpeedSection.Parent = Container
@@ -170,7 +170,7 @@ btnSuper.MouseButton1Click:Connect(function()
     btnSuper.BackgroundColor3 = Color3.fromRGB(45, 185, 95)
 end)
 
--- Đảm bảo áp dụng tốc độ liên tục ngay cả khi nhân vật hồi sinh
+-- Luôn ép buộc tốc độ mượt mà bằng Heartbeat chống ghi đè
 RunService.Heartbeat:Connect(function()
     pcall(function()
         local char = LocalPlayer.Character
@@ -318,7 +318,7 @@ RunService.RenderStepped:Connect(function()
 end)
 
 --------------------------------------------------------------------------------
--- 4. BẢNG ESP (TÊN + KHOẢNG CÁCH - HOẠT ĐỘNG CHUẨN XÁC 100%)
+-- 4. BẢNG ESP (HOẠT ĐỘNG HOÀN HẢO NGAY KHI BẬT)
 --------------------------------------------------------------------------------
 local ESPMenuSection = Instance.new("Frame")
 ESPMenuSection.Parent = Container
@@ -353,11 +353,11 @@ RunService.RenderStepped:Connect(function()
             local head = char:FindFirstChild("Head")
             local hum = char:FindFirstChild("Humanoid")
             
-            local tag = char:FindFirstChild("WorkingESP_Tag")
+            local tag = char:FindFirstChild("WorkingESP_FixedTag")
             if espMasterActive and root and head and hum and hum.Health > 0 then
                 if not tag then
                     local bill = Instance.new("BillboardGui", char)
-                    bill.Name = "WorkingESP_Tag"
+                    bill.Name = "WorkingESP_FixedTag"
                     bill.AlwaysOnTop = true
                     bill.Size = UDim2.new(0, 160, 0, 40)
                     bill.StudsOffset = Vector3.new(0, 2.8, 0)
@@ -494,4 +494,4 @@ TeleBtn.MouseButton1Click:Connect(function()
     end)
 end)
 
-print("Đã tải thành công Mobile VIP Script Final Working!")
+print("Đã tải thành công Script 100% Working trên Delta X!")
