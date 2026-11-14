@@ -6,13 +6,13 @@ local Camera = workspace.CurrentCamera
 local LocalPlayer = Players.LocalPlayer
 
 -- Xóa menu cũ tránh chồng chéo
-if CoreGui:FindFirstChild("DeltaMobileVipAntiFlash") then
-    CoreGui.DeltaMobileVipAntiFlash:Destroy()
+if CoreGui:FindFirstChild("DeltaMobileVipUltimateFixed") then
+    CoreGui.DeltaMobileVipUltimateFixed:Destroy()
 end
 
 -- Khởi tạo UI Menu chính
 local ScreenGui = Instance.new("ScreenGui")
-ScreenGui.Name = "DeltaMobileVipAntiFlash"
+ScreenGui.Name = "DeltaMobileVipUltimateFixed"
 ScreenGui.Parent = CoreGui
 ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
@@ -45,7 +45,7 @@ TitleText.BackgroundTransparency = 1
 TitleText.Position = UDim2.new(0, 15, 0, 0)
 TitleText.Size = UDim2.new(1, -30, 1, 0)
 TitleText.Font = Enum.Font.GothamBold
-TitleText.Text = "⚡ DELTA X - ANTI-FLASH STABLE MENU ⚡"
+TitleText.Text = "⚡ DELTA X - ULTIMATE FIXED MENU ⚡"
 TitleText.TextColor3 = Color3.fromRGB(0, 255, 170)
 TitleText.TextSize = 11
 TitleText.TextXAlignment = Enum.TextXAlignment.Left
@@ -97,7 +97,7 @@ local function createToggleBtn(parent, text, pos, size)
 end
 
 --------------------------------------------------------------------------------
--- 1. CHỨC NĂNG CHẠY NHANH (ỔN ĐỊNH - KHÔNG BAO GIỜ MẤT TÁC DỤNG)
+-- 1. CHỨC NĂNG CHẠY NHANH (CƠ CHẾ KHÓA TỐC ĐỘ 24/7 - KHÔNG BAO GIỜ MẤT)
 --------------------------------------------------------------------------------
 local SpeedSection = Instance.new("Frame")
 SpeedSection.Parent = Container
@@ -137,17 +137,20 @@ SpeedBox.FocusLost:Connect(function()
     end
 end)
 
--- Luồng khóa tốc độ bằng Heartbeat tối ưu chống ghi đè
-RunService.Heartbeat:Connect(function()
-    pcall(function()
-        local char = LocalPlayer.Character
-        if char then
-            local hum = char:FindFirstChild("Humanoid")
-            if hum and hum.WalkSpeed ~= customSpeed then
-                hum.WalkSpeed = customSpeed
+-- Luồng độc lập khóa cứng WalkSpeed bất chấp game reset hay ghi đè
+task.spawn(function()
+    while true do
+        task.wait(0.03) -- Quét liên tục siêu tốc độ
+        pcall(function()
+            local char = LocalPlayer.Character
+            if char then
+                local hum = char:FindFirstChild("Humanoid")
+                if hum and hum.WalkSpeed ~= customSpeed then
+                    hum.WalkSpeed = customSpeed
+                end
             end
-        end
-    end)
+        end)
+    end
 end)
 
 --------------------------------------------------------------------------------
@@ -285,7 +288,7 @@ RunService.RenderStepped:Connect(function()
 end)
 
 --------------------------------------------------------------------------------
--- 4. BẢNG ESP (ĐÃ FIX TRIỆT ĐỂ LỖI CHỚP NHÁY / LÚC HIỆN LÚC MẤT)
+-- 4. BẢNG ESP (ĐÃ ỔN ĐỊNH - CHỐNG CHỚP NHÁY)
 --------------------------------------------------------------------------------
 local ESPMenuSection = Instance.new("Frame")
 ESPMenuSection.Parent = Container
@@ -312,7 +315,6 @@ MasterESPBtn.MouseButton1Click:Connect(function()
     MasterESPBtn.Text = espMasterActive and "ESP Tên & Khoảng Cách: BẬT" or "ESP Tên & Khoảng Cách: TẮT"
 end)
 
--- Sử dụng bảng quản lý ESP riêng biệt chống chớp nháy
 local activeTags = {}
 
 RunService.RenderStepped:Connect(function()
@@ -473,4 +475,4 @@ TeleBtn.MouseButton1Click:Connect(function()
     end)
 end)
 
-print("Đã tải xong Menu Anti-Flash ổn định tuyệt đối trên Delta X!")
+print("Đã tải xong Menu Ultimate Fixed chuẩn xác 100% trên Delta X!")
