@@ -2,18 +2,17 @@
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local CoreGui = game:GetService("CoreGui")
-local UserInputService = game:GetService("UserInputService")
 local Camera = workspace.CurrentCamera
 local LocalPlayer = Players.LocalPlayer
 
--- Xóa menu cũ nếu chạy lại script tránh chồng chéo
-if CoreGui:FindFirstChild("DeltaMobileVipAbsoluteFinal") then
-    CoreGui.DeltaMobileVipAbsoluteFinal:Destroy()
+-- Xóa menu cũ tránh chồng chéo
+if CoreGui:FindFirstChild("DeltaMobileMenuAbsoluteSuperFix") then
+    CoreGui.DeltaMobileMenuAbsoluteSuperFix:Destroy()
 end
 
 -- Khởi tạo UI Menu chính
 local ScreenGui = Instance.new("ScreenGui")
-ScreenGui.Name = "DeltaMobileVipAbsoluteFinal"
+ScreenGui.Name = "DeltaMobileMenuAbsoluteSuperFix"
 ScreenGui.Parent = CoreGui
 ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
@@ -46,7 +45,7 @@ TitleText.BackgroundTransparency = 1
 TitleText.Position = UDim2.new(0, 15, 0, 0)
 TitleText.Size = UDim2.new(1, -30, 1, 0)
 TitleText.Font = Enum.Font.GothamBold
-TitleText.Text = "⚡ DELTA X - ABSOLUTE FINAL VERSION ⚡"
+TitleText.Text = "⚡ DELTA X - ULTIMATE STABLE MENU ⚡"
 TitleText.TextColor3 = Color3.fromRGB(0, 255, 170)
 TitleText.TextSize = 11
 TitleText.TextXAlignment = Enum.TextXAlignment.Left
@@ -98,7 +97,7 @@ local function createToggleBtn(parent, text, pos, size)
 end
 
 --------------------------------------------------------------------------------
--- 1. CHỨC NĂNG CHẠY NHANH (NHẬP SỐ - ĐÃ FIX KHÔNG BAO GIỜ BỊ GHI ĐÈ)
+-- 1. CHỨC NĂNG CHẠY NHANH (NHẬP SỐ - HOẠT ĐỘNG ĐỘC LẬP SIÊU MƯỢT)
 --------------------------------------------------------------------------------
 local SpeedSection = Instance.new("Frame")
 SpeedSection.Parent = Container
@@ -138,17 +137,19 @@ SpeedBox.FocusLost:Connect(function()
     end
 end)
 
--- Luồng khóa tốc độ siêu mượt bằng Heartbeat kết hợp check nhân vật liên tục
-RunService.Heartbeat:Connect(function()
-    pcall(function()
-        local char = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
-        if char then
-            local hum = char:FindFirstChild("Humanoid")
-            if hum and hum.WalkSpeed ~= customSpeed then
-                hum.WalkSpeed = customSpeed
+-- Luồng độc lập chuyên trách tốc độ chạy
+task.spawn(function()
+    while task.wait(0.1) do
+        pcall(function()
+            local char = LocalPlayer.Character
+            if char then
+                local hum = char:FindFirstChild("Humanoid")
+                if hum and hum.WalkSpeed ~= customSpeed then
+                    hum.WalkSpeed = customSpeed
+                end
             end
-        end
-    end)
+        end)
+    end
 end)
 
 --------------------------------------------------------------------------------
@@ -286,7 +287,7 @@ RunService.RenderStepped:Connect(function()
 end)
 
 --------------------------------------------------------------------------------
--- 4. BẢNG ESP (ĐÃ TỐI ƯU HIỂN THỊ ỔN ĐỊNH 100%)
+-- 4. BẢNG ESP (LUỒNG ĐỘC LẬP - HIỂN THỊ TÊN VÀ KHOẢNG CÁCH CHUẨN 100%)
 --------------------------------------------------------------------------------
 local ESPMenuSection = Instance.new("Frame")
 ESPMenuSection.Parent = Container
@@ -313,41 +314,45 @@ MasterESPBtn.MouseButton1Click:Connect(function()
     MasterESPBtn.Text = espMasterActive and "ESP Tên & Khoảng Cách: BẬT" or "ESP Tên & Khoảng Cách: TẮT"
 end)
 
-RunService.RenderStepped:Connect(function()
-    for _, p in ipairs(Players:GetPlayers()) do
-        if p ~= LocalPlayer and p.Character then
-            local char = p.Character
-            local root = char:FindFirstChild("HumanoidRootPart")
-            local head = char:FindFirstChild("Head")
-            
-            local tag = char:FindFirstChild("AbsoluteFinalESP_Tag")
-            if espMasterActive and root and head then
-                if not tag then
-                    local bill = Instance.new("BillboardGui", char)
-                    bill.Name = "AbsoluteFinalESP_Tag"
-                    bill.AlwaysOnTop = true
-                    bill.Size = UDim2.new(0, 160, 0, 40)
-                    bill.StudsOffset = Vector3.new(0, 2.8, 0)
+task.spawn(function()
+    while task.wait(0.2) do
+        pcall(function()
+            for _, p in ipairs(Players:GetPlayers()) do
+                if p ~= LocalPlayer and p.Character then
+                    local char = p.Character
+                    local root = char:FindFirstChild("HumanoidRootPart")
+                    local head = char:FindFirstChild("Head")
+                    local tag = char:FindFirstChild("SuperStableESP_Tag")
                     
-                    local txt = Instance.new("TextLabel", bill)
-                    txt.Name = "Info"
-                    txt.BackgroundTransparency = 1
-                    txt.Size = UDim2.new(1, 0, 1, 0)
-                    txt.Font = Enum.Font.GothamBold
-                    txt.TextSize = 11
-                    txt.TextColor3 = Color3.fromRGB(0, 255, 170)
-                    txt.TextStrokeTransparency = 0.3
-                else
-                    local myChar = LocalPlayer.Character
-                    local myRoot = myChar and myChar:FindFirstChild("HumanoidRootPart")
-                    local dist = myRoot and math.floor((root.Position - myRoot.Position).Magnitude) or 0
-                    tag.Info.Text = "👤 " .. p.Name .. " [" .. dist .. "m]"
-                    tag.Enabled = true
+                    if espMasterActive and root and head then
+                        if not tag then
+                            local bill = Instance.new("BillboardGui", char)
+                            bill.Name = "SuperStableESP_Tag"
+                            bill.AlwaysOnTop = true
+                            bill.Size = UDim2.new(0, 160, 0, 40)
+                            bill.StudsOffset = Vector3.new(0, 2.8, 0)
+                            
+                            local txt = Instance.new("TextLabel", bill)
+                            txt.Name = "Info"
+                            txt.BackgroundTransparency = 1
+                            txt.Size = UDim2.new(1, 0, 1, 0)
+                            txt.Font = Enum.Font.GothamBold
+                            txt.TextSize = 11
+                            txt.TextColor3 = Color3.fromRGB(0, 255, 170)
+                            txt.TextStrokeTransparency = 0.3
+                        else
+                            local myChar = LocalPlayer.Character
+                            local myRoot = myChar and myChar:FindFirstChild("HumanoidRootPart")
+                            local dist = myRoot and math.floor((root.Position - myRoot.Position).Magnitude) or 0
+                            tag.Info.Text = "👤 " .. p.Name .. " [" .. dist .. "m]"
+                            tag.Enabled = true
+                        end
+                    else
+                        if tag then tag.Enabled = false end
+                    end
                 end
-            else
-                if tag then tag.Enabled = false end
             end
-        end
+        end)
     end
 end)
 
@@ -461,4 +466,4 @@ TeleBtn.MouseButton1Click:Connect(function()
     end)
 end)
 
-print("Đã tải xong toàn bộ Script tối ưu tuyệt đối trên Delta X!")
+print("Đã tải thành công Menu Tổng Hợp Super Stable trên Delta X!")
