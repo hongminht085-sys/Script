@@ -1,4 +1,4 @@
--- Kiểm tra môi trường Executor trên Điện Thoại
+-- Kiểm tra môi trường Executor trên Điện Thoại (Delta X)
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local CoreGui = game:GetService("CoreGui")
@@ -7,13 +7,13 @@ local Camera = workspace.CurrentCamera
 local LocalPlayer = Players.LocalPlayer
 
 -- Xóa menu cũ nếu chạy lại script tránh chồng chéo
-if CoreGui:FindFirstChild("DeltaMobileVipUltimateCore") then
-    CoreGui.DeltaMobileVipUltimateCore:Destroy()
+if CoreGui:FindFirstChild("DeltaMobileVipUltimate100") then
+    CoreGui.DeltaMobileVipUltimate100:Destroy()
 end
 
 -- Khởi tạo UI Menu chính
 local ScreenGui = Instance.new("ScreenGui")
-ScreenGui.Name = "DeltaMobileVipUltimateCore"
+ScreenGui.Name = "DeltaMobileVipUltimate100"
 ScreenGui.Parent = CoreGui
 ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
@@ -46,7 +46,7 @@ TitleText.BackgroundTransparency = 1
 TitleText.Position = UDim2.new(0, 15, 0, 0)
 TitleText.Size = UDim2.new(1, -30, 1, 0)
 TitleText.Font = Enum.Font.GothamBold
-TitleText.Text = "⚡ DELTA X - ULTIMATE CORE MENU ⚡"
+TitleText.Text = "⚡ DELTA X - ULTIMATE FIXED 100% ⚡"
 TitleText.TextColor3 = Color3.fromRGB(0, 255, 170)
 TitleText.TextSize = 11
 TitleText.TextXAlignment = Enum.TextXAlignment.Left
@@ -98,7 +98,7 @@ local function createToggleBtn(parent, text, pos, size)
 end
 
 --------------------------------------------------------------------------------
--- 1. CHỨC NĂNG CHẠY NHANH (DẠNG NHẬP SỐ - FIX GIẬT 100% & ỔN ĐỊNH)
+-- 1. CHỨC NĂNG CHẠY NHANH (NHẬP SỐ - KHÓA TỐC ĐỘ CHỐNG GHI ĐÈ 100%)
 --------------------------------------------------------------------------------
 local SpeedSection = Instance.new("Frame")
 SpeedSection.Parent = Container
@@ -138,13 +138,13 @@ SpeedBox.FocusLost:Connect(function()
     end
 end)
 
--- Áp dụng tốc độ mượt mà, tự động phục hồi khi nhân vật hồi sinh mà không bị giật lag
+-- Luồng khóa tốc độ siêu mượt bằng Heartbeat, chống game reset lại
 RunService.Heartbeat:Connect(function()
     pcall(function()
         local char = LocalPlayer.Character
         if char then
             local hum = char:FindFirstChild("Humanoid")
-            if hum and hum.WalkSpeed ~= customSpeed then
+            if hum then
                 hum.WalkSpeed = customSpeed
             end
         end
@@ -286,7 +286,7 @@ RunService.RenderStepped:Connect(function()
 end)
 
 --------------------------------------------------------------------------------
--- 4. BẢNG ESP (TỐI ƯU GỌN GÀNG, CHẠY ỔN ĐỊNH KHÔNG LỖI LÚC ĐƯỢC LÚC KHÔNG)
+-- 4. BẢNG ESP (TÊN + KHOẢNG CÁCH - HOẠT ĐỘNG ỔN ĐỊNH 100%)
 --------------------------------------------------------------------------------
 local ESPMenuSection = Instance.new("Frame")
 ESPMenuSection.Parent = Container
@@ -319,13 +319,12 @@ RunService.RenderStepped:Connect(function()
             local char = p.Character
             local root = char:FindFirstChild("HumanoidRootPart")
             local head = char:FindFirstChild("Head")
-            local hum = char:FindFirstChild("Humanoid")
             
-            local tag = char:FindFirstChild("UltimateESP_Tag")
-            if espMasterActive and root and head and hum and hum.Health > 0 then
+            local tag = char:FindFirstChild("AbsoluteFixESP_Tag")
+            if espMasterActive and root and head then
                 if not tag then
                     local bill = Instance.new("BillboardGui", char)
-                    bill.Name = "UltimateESP_Tag"
+                    bill.Name = "AbsoluteFixESP_Tag"
                     bill.AlwaysOnTop = true
                     bill.Size = UDim2.new(0, 160, 0, 40)
                     bill.StudsOffset = Vector3.new(0, 2.8, 0)
@@ -462,4 +461,4 @@ TeleBtn.MouseButton1Click:Connect(function()
     end)
 end)
 
-print("Đã tải xong Script Ultimate Core trên Delta X!")
+print("Đã tải thành công Script Ultimate Core Fixed 100%!")
