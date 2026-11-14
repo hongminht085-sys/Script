@@ -7,13 +7,13 @@ local Camera = workspace.CurrentCamera
 local LocalPlayer = Players.LocalPlayer
 
 -- Xóa menu cũ nếu chạy lại script tránh chồng chéo
-if CoreGui:FindFirstChild("DeltaMobileVipAbsoluteWorking") then
-    CoreGui.DeltaMobileVipAbsoluteWorking:Destroy()
+if CoreGui:FindFirstChild("DeltaMobileVipUltimateCore") then
+    CoreGui.DeltaMobileVipUltimateCore:Destroy()
 end
 
 -- Khởi tạo UI Menu chính
 local ScreenGui = Instance.new("ScreenGui")
-ScreenGui.Name = "DeltaMobileVipAbsoluteWorking"
+ScreenGui.Name = "DeltaMobileVipUltimateCore"
 ScreenGui.Parent = CoreGui
 ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
@@ -46,7 +46,7 @@ TitleText.BackgroundTransparency = 1
 TitleText.Position = UDim2.new(0, 15, 0, 0)
 TitleText.Size = UDim2.new(1, -30, 1, 0)
 TitleText.Font = Enum.Font.GothamBold
-TitleText.Text = "⚡ DELTA X - 100% FIXED & WORKING ⚡"
+TitleText.Text = "⚡ DELTA X - ULTIMATE CORE MENU ⚡"
 TitleText.TextColor3 = Color3.fromRGB(0, 255, 170)
 TitleText.TextSize = 11
 TitleText.TextXAlignment = Enum.TextXAlignment.Left
@@ -98,86 +98,54 @@ local function createToggleBtn(parent, text, pos, size)
 end
 
 --------------------------------------------------------------------------------
--- 1. CHỨC NĂNG CHẠY NHANH (3 NÚT: BÌNH THƯỜNG - NHANH HƠN - SIÊU NHANH)
+-- 1. CHỨC NĂNG CHẠY NHANH (DẠNG NHẬP SỐ - FIX GIẬT 100% & ỔN ĐỊNH)
 --------------------------------------------------------------------------------
 local SpeedSection = Instance.new("Frame")
 SpeedSection.Parent = Container
 SpeedSection.BackgroundColor3 = Color3.fromRGB(22, 22, 30)
-SpeedSection.Size = UDim2.new(1, 0, 0, 85)
+SpeedSection.Size = UDim2.new(1, 0, 0, 75)
 Instance.new("UICorner", SpeedSection).CornerRadius = UDim.new(0, 8)
 
 local SText = Instance.new("TextLabel")
 SText.Parent = SpeedSection
 SText.BackgroundTransparency = 1
-SText.Position = UDim2.new(0, 12, 0, 6)
+SText.Position = UDim2.new(0, 12, 0, 8)
 SText.Size = UDim2.new(1, -24, 0, 20)
 SText.Font = Enum.Font.GothamBold
-SText.Text = "🏃 Chọn Mức Tốc Độ Chạy"
+SText.Text = "🏃 Tốc độ chạy (Nhập số tùy chỉnh)"
 SText.TextColor3 = Color3.fromRGB(255, 255, 255)
 SText.TextSize = 12
 SText.TextXAlignment = Enum.TextXAlignment.Left
 
-local currentSpeed = 16
+local SpeedBox = Instance.new("TextBox")
+SpeedBox.Parent = SpeedSection
+SpeedBox.BackgroundColor3 = Color3.fromRGB(32, 32, 46)
+SpeedBox.Position = UDim2.new(0, 12, 0, 32)
+SpeedBox.Size = UDim2.new(1, -24, 0, 30)
+SpeedBox.Font = Enum.Font.Gotham
+SpeedBox.Text = "16"
+SpeedBox.TextColor3 = Color3.fromRGB(0, 255, 170)
+SpeedBox.TextSize = 12
+Instance.new("UICorner", SpeedBox).CornerRadius = UDim.new(0, 6)
 
-local btnNormal = Instance.new("TextButton", SpeedSection)
-btnNormal.Position = UDim2.new(0, 12, 0, 32)
-btnNormal.Size = UDim2.new(0.31, 0, 0, 38)
-btnNormal.BackgroundColor3 = Color3.fromRGB(45, 185, 95)
-btnNormal.Font = Enum.Font.GothamBold
-btnNormal.Text = "1. Bình Thường"
-btnNormal.TextColor3 = Color3.fromRGB(255, 255, 255)
-btnNormal.TextSize = 10
-Instance.new("UICorner", btnNormal).CornerRadius = UDim.new(0, 6)
-
-local btnFast = Instance.new("TextButton", SpeedSection)
-btnFast.Position = UDim2.new(0.34, 0, 0, 32)
-btnFast.Size = UDim2.new(0.31, 0, 0, 38)
-btnFast.BackgroundColor3 = Color3.fromRGB(50, 50, 65)
-btnFast.Font = Enum.Font.GothamBold
-btnFast.Text = "2. Nhanh Hơn"
-btnFast.TextColor3 = Color3.fromRGB(255, 255, 255)
-btnFast.TextSize = 10
-Instance.new("UICorner", btnFast).CornerRadius = UDim.new(0, 6)
-
-local btnSuper = Instance.new("TextButton", SpeedSection)
-btnSuper.Position = UDim2.new(0.67, 0, 0, 32)
-btnSuper.Size = UDim2.new(0.31, 0, 0, 38)
-btnSuper.BackgroundColor3 = Color3.fromRGB(50, 50, 65)
-btnSuper.Font = Enum.Font.GothamBold
-btnSuper.Text = "3. Siêu Nhanh"
-btnSuper.TextColor3 = Color3.fromRGB(255, 255, 255)
-btnSuper.TextSize = 10
-Instance.new("UICorner", btnSuper).CornerRadius = UDim.new(0, 6)
-
-btnNormal.MouseButton1Click:Connect(function()
-    currentSpeed = 16
-    btnNormal.BackgroundColor3 = Color3.fromRGB(45, 185, 95)
-    btnFast.BackgroundColor3 = Color3.fromRGB(50, 50, 65)
-    btnSuper.BackgroundColor3 = Color3.fromRGB(50, 50, 65)
+local customSpeed = 16
+SpeedBox.FocusLost:Connect(function()
+    local val = tonumber(SpeedBox.Text)
+    if val and val > 0 then 
+        customSpeed = val 
+    else 
+        SpeedBox.Text = tostring(customSpeed) 
+    end
 end)
 
-btnFast.MouseButton1Click:Connect(function()
-    currentSpeed = 30
-    btnNormal.BackgroundColor3 = Color3.fromRGB(50, 50, 65)
-    btnFast.BackgroundColor3 = Color3.fromRGB(45, 185, 95)
-    btnSuper.BackgroundColor3 = Color3.fromRGB(50, 50, 65)
-end)
-
-btnSuper.MouseButton1Click:Connect(function()
-    currentSpeed = 50
-    btnNormal.BackgroundColor3 = Color3.fromRGB(50, 50, 65)
-    btnFast.BackgroundColor3 = Color3.fromRGB(50, 50, 65)
-    btnSuper.BackgroundColor3 = Color3.fromRGB(45, 185, 95)
-end)
-
--- Luôn ép buộc tốc độ mượt mà bằng Heartbeat chống ghi đè
+-- Áp dụng tốc độ mượt mà, tự động phục hồi khi nhân vật hồi sinh mà không bị giật lag
 RunService.Heartbeat:Connect(function()
     pcall(function()
         local char = LocalPlayer.Character
         if char then
             local hum = char:FindFirstChild("Humanoid")
-            if hum and hum.WalkSpeed ~= currentSpeed then
-                hum.WalkSpeed = currentSpeed
+            if hum and hum.WalkSpeed ~= customSpeed then
+                hum.WalkSpeed = customSpeed
             end
         end
     end)
@@ -318,7 +286,7 @@ RunService.RenderStepped:Connect(function()
 end)
 
 --------------------------------------------------------------------------------
--- 4. BẢNG ESP (HOẠT ĐỘNG HOÀN HẢO NGAY KHI BẬT)
+-- 4. BẢNG ESP (TỐI ƯU GỌN GÀNG, CHẠY ỔN ĐỊNH KHÔNG LỖI LÚC ĐƯỢC LÚC KHÔNG)
 --------------------------------------------------------------------------------
 local ESPMenuSection = Instance.new("Frame")
 ESPMenuSection.Parent = Container
@@ -353,11 +321,11 @@ RunService.RenderStepped:Connect(function()
             local head = char:FindFirstChild("Head")
             local hum = char:FindFirstChild("Humanoid")
             
-            local tag = char:FindFirstChild("WorkingESP_FixedTag")
+            local tag = char:FindFirstChild("UltimateESP_Tag")
             if espMasterActive and root and head and hum and hum.Health > 0 then
                 if not tag then
                     local bill = Instance.new("BillboardGui", char)
-                    bill.Name = "WorkingESP_FixedTag"
+                    bill.Name = "UltimateESP_Tag"
                     bill.AlwaysOnTop = true
                     bill.Size = UDim2.new(0, 160, 0, 40)
                     bill.StudsOffset = Vector3.new(0, 2.8, 0)
@@ -494,4 +462,4 @@ TeleBtn.MouseButton1Click:Connect(function()
     end)
 end)
 
-print("Đã tải thành công Script 100% Working trên Delta X!")
+print("Đã tải xong Script Ultimate Core trên Delta X!")
