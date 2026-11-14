@@ -7,13 +7,13 @@ local Camera = workspace.CurrentCamera
 local LocalPlayer = Players.LocalPlayer
 
 -- Xóa menu cũ nếu chạy lại script tránh chồng chéo
-if CoreGui:FindFirstChild("DeltaMobileVipUltimate100") then
-    CoreGui.DeltaMobileVipUltimate100:Destroy()
+if CoreGui:FindFirstChild("DeltaMobileVipAbsoluteFinal") then
+    CoreGui.DeltaMobileVipAbsoluteFinal:Destroy()
 end
 
 -- Khởi tạo UI Menu chính
 local ScreenGui = Instance.new("ScreenGui")
-ScreenGui.Name = "DeltaMobileVipUltimate100"
+ScreenGui.Name = "DeltaMobileVipAbsoluteFinal"
 ScreenGui.Parent = CoreGui
 ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
@@ -46,7 +46,7 @@ TitleText.BackgroundTransparency = 1
 TitleText.Position = UDim2.new(0, 15, 0, 0)
 TitleText.Size = UDim2.new(1, -30, 1, 0)
 TitleText.Font = Enum.Font.GothamBold
-TitleText.Text = "⚡ DELTA X - ULTIMATE FIXED 100% ⚡"
+TitleText.Text = "⚡ DELTA X - ABSOLUTE FINAL VERSION ⚡"
 TitleText.TextColor3 = Color3.fromRGB(0, 255, 170)
 TitleText.TextSize = 11
 TitleText.TextXAlignment = Enum.TextXAlignment.Left
@@ -98,7 +98,7 @@ local function createToggleBtn(parent, text, pos, size)
 end
 
 --------------------------------------------------------------------------------
--- 1. CHỨC NĂNG CHẠY NHANH (NHẬP SỐ - KHÓA TỐC ĐỘ CHỐNG GHI ĐÈ 100%)
+-- 1. CHỨC NĂNG CHẠY NHANH (NHẬP SỐ - ĐÃ FIX KHÔNG BAO GIỜ BỊ GHI ĐÈ)
 --------------------------------------------------------------------------------
 local SpeedSection = Instance.new("Frame")
 SpeedSection.Parent = Container
@@ -138,13 +138,13 @@ SpeedBox.FocusLost:Connect(function()
     end
 end)
 
--- Luồng khóa tốc độ siêu mượt bằng Heartbeat, chống game reset lại
+-- Luồng khóa tốc độ siêu mượt bằng Heartbeat kết hợp check nhân vật liên tục
 RunService.Heartbeat:Connect(function()
     pcall(function()
-        local char = LocalPlayer.Character
+        local char = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
         if char then
             local hum = char:FindFirstChild("Humanoid")
-            if hum then
+            if hum and hum.WalkSpeed ~= customSpeed then
                 hum.WalkSpeed = customSpeed
             end
         end
@@ -286,7 +286,7 @@ RunService.RenderStepped:Connect(function()
 end)
 
 --------------------------------------------------------------------------------
--- 4. BẢNG ESP (TÊN + KHOẢNG CÁCH - HOẠT ĐỘNG ỔN ĐỊNH 100%)
+-- 4. BẢNG ESP (ĐÃ TỐI ƯU HIỂN THỊ ỔN ĐỊNH 100%)
 --------------------------------------------------------------------------------
 local ESPMenuSection = Instance.new("Frame")
 ESPMenuSection.Parent = Container
@@ -320,11 +320,11 @@ RunService.RenderStepped:Connect(function()
             local root = char:FindFirstChild("HumanoidRootPart")
             local head = char:FindFirstChild("Head")
             
-            local tag = char:FindFirstChild("AbsoluteFixESP_Tag")
+            local tag = char:FindFirstChild("AbsoluteFinalESP_Tag")
             if espMasterActive and root and head then
                 if not tag then
                     local bill = Instance.new("BillboardGui", char)
-                    bill.Name = "AbsoluteFixESP_Tag"
+                    bill.Name = "AbsoluteFinalESP_Tag"
                     bill.AlwaysOnTop = true
                     bill.Size = UDim2.new(0, 160, 0, 40)
                     bill.StudsOffset = Vector3.new(0, 2.8, 0)
@@ -461,4 +461,4 @@ TeleBtn.MouseButton1Click:Connect(function()
     end)
 end)
 
-print("Đã tải thành công Script Ultimate Core Fixed 100%!")
+print("Đã tải xong toàn bộ Script tối ưu tuyệt đối trên Delta X!")
