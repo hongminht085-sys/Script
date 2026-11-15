@@ -1,8 +1,10 @@
--- Kiểm tra môi trường Executor trên Điện Thoại (Delta X)
+-- ============================================================================
+-- DELTA X - ULTIMATE FIXED MENU (FINAL OPTIMIZED & STABLE VERSION)
+-- ============================================================================
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local CoreGui = game:GetService("CoreGui")
-local Camera = workspace.CurrentCamera
+local UserInputService = game:GetService("UserInputService")
 local LocalPlayer = Players.LocalPlayer
 
 -- Xóa menu cũ tránh chồng chéo
@@ -97,7 +99,7 @@ local function createToggleBtn(parent, text, pos, size)
 end
 
 --------------------------------------------------------------------------------
--- 1. CHỨC NĂNG CHẠY NHANH (CƠ CHẾ KHÓA TỐC ĐỘ 24/7 - KHÔNG BAO GIỜ MẤT)
+-- 1. CHỨC NĂNG CHẠY NHANH (ÉP XUỐNG CỨNG KHÔNG BAO GIỜ MẤT TỐC ĐỘ)
 --------------------------------------------------------------------------------
 local SpeedSection = Instance.new("Frame")
 SpeedSection.Parent = Container
@@ -111,7 +113,7 @@ SText.BackgroundTransparency = 1
 SText.Position = UDim2.new(0, 12, 0, 8)
 SText.Size = UDim2.new(1, -24, 0, 20)
 SText.Font = Enum.Font.GothamBold
-SText.Text = "🏃 Tốc độ chạy (Nhập số tùy chỉnh)"
+SText.Text = "🏃 Tốc độ chạy (Khóa cứng chống reset)"
 SText.TextColor3 = Color3.fromRGB(255, 255, 255)
 SText.TextSize = 12
 SText.TextXAlignment = Enum.TextXAlignment.Left
@@ -137,20 +139,16 @@ SpeedBox.FocusLost:Connect(function()
     end
 end)
 
--- Luồng độc lập khóa cứng WalkSpeed bất chấp game reset hay ghi đè
-task.spawn(function()
-    while true do
-        task.wait(0.03) -- Quét liên tục siêu tốc độ
-        pcall(function()
-            local char = LocalPlayer.Character
-            if char then
-                local hum = char:FindFirstChild("Humanoid")
-                if hum and hum.WalkSpeed ~= customSpeed then
-                    hum.WalkSpeed = customSpeed
-                end
+RunService.RenderStepped:Connect(function()
+    pcall(function()
+        local char = LocalPlayer.Character
+        if char then
+            local hum = char:FindFirstChildOfClass("Humanoid")
+            if hum and hum.WalkSpeed ~= customSpeed then
+                hum.WalkSpeed = customSpeed
             end
-        end)
-    end
+        end
+    end)
 end)
 
 --------------------------------------------------------------------------------
@@ -228,10 +226,16 @@ fovCircle.Color = Color3.fromRGB(0, 255, 170)
 fovCircle.Visible = false
 
 local isShooting = false
+local currentWeaponConn = nil
+
 local function hookWeapon(char)
+    if currentWeaponConn then 
+        currentWeaponConn:Disconnect() 
+        currentWeaponConn = nil 
+    end
     local tool = char:FindFirstChildOfClass("Tool")
     if tool then
-        tool.Activated:Connect(function()
+        currentWeaponConn = tool.Activated:Connect(function()
             isShooting = true
             task.delay(0.2, function() isShooting = false end)
         end)
@@ -253,6 +257,9 @@ end
 
 RunService.RenderStepped:Connect(function()
     pcall(function()
+        local Camera = workspace.CurrentCamera
+        if not Camera then return end
+        
         local screenCenter = Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y / 2)
         if aimbotActive then
             fovCircle.Visible = true
@@ -288,7 +295,7 @@ RunService.RenderStepped:Connect(function()
 end)
 
 --------------------------------------------------------------------------------
--- 4. BẢNG ESP (ĐÃ ỔN ĐỊNH - CHỐNG CHỚP NHÁY)
+-- 4. BẢNG ESP (ỔN ĐỊNH - KHÔNG CHỚP NHÁY)
 --------------------------------------------------------------------------------
 local ESPMenuSection = Instance.new("Frame")
 ESPMenuSection.Parent = Container
@@ -323,9 +330,7 @@ RunService.RenderStepped:Connect(function()
             if p ~= LocalPlayer then
                 local char = p.Character
                 if espMasterActive and char and char:FindFirstChild("Head") and char:FindFirstChild("HumanoidRootPart") then
-                    local head = char.Head
                     local root = char.HumanoidRootPart
-                    
                     local tag = activeTags[p]
                     if not tag or not tag.Parent then
                         local bill = Instance.new("BillboardGui", char)
@@ -366,7 +371,7 @@ RunService.RenderStepped:Connect(function()
 end)
 
 --------------------------------------------------------------------------------
--- 5. DANH SÁCH SERVER & DỊCH CHUYỂN (TELEVIP)
+-- 5. DANH SÁCH SERVER & DỊCH CHUYỂN (TELEVIP AN TOÀN)
 --------------------------------------------------------------------------------
 local ListSection = Instance.new("Frame")
 ListSection.Parent = Container
@@ -408,56 +413,49 @@ PlayerListLayout.Padding = UDim.new(0, 4)
 local selectedTarget = nil
 
 local function refreshServerList()
-    for _, child in ipairs(PlayerScroll:GetChildren()) do
-        if child:IsA("TextButton") then child:Destroy() end
-    end
-    for _, p in ipairs(Players:GetPlayers()) do
-        if p ~= LocalPlayer then
-            local btn = Instance.new("TextButton", PlayerScroll)
-            btn.BackgroundColor3 = (selectedTarget == p) and Color3.fromRGB(0, 160, 100) or Color3.fromRGB(30, 30, 42)
-            btn.Size = UDim2.new(1, 0, 0, 42)
-            btn.Text = ""
-            Instance.new("UICorner", btn).CornerRadius = UDim.new(0, 5)
-            
-            local nameLbl = Instance.new("TextLabel", btn)
-            nameLbl.BackgroundTransparency = 1
-            nameLbl.Position = UDim2.new(0, 10, 0, 4)
-            nameLbl.Size = UDim2.new(1, -50, 0, 18)
-            nameLbl.Font = Enum.Font.GothamBold
-            nameLbl.Text = p.Name
-            nameLbl.TextColor3 = Color3.fromRGB(255, 255, 255)
-            nameLbl.TextSize = 12
-            nameLbl.TextXAlignment = Enum.TextXAlignment.Left
-            
-            local idLbl = Instance.new("TextLabel", btn)
-            idLbl.BackgroundTransparency = 1
-            idLbl.Position = UDim2.new(0, 10, 0, 20)
-            idLbl.Size = UDim2.new(1, -50, 0, 16)
-            idLbl.Font = Enum.Font.Gotham
-            idLbl.Text = "ID: " .. p.UserId
-            idLbl.TextColor3 = Color3.fromRGB(150, 150, 170)
-            idLbl.TextSize = 10
-            idLbl.TextXAlignment = Enum.TextXAlignment.Left
-            
-            pcall(function()
-                local content = Players:GetUserThumbnailAsync(p.UserId, Enum.ThumbnailType.HeadShot, Enum.ThumbnailSize.Size420x420)
-                local img = Instance.new("ImageLabel", btn)
-                img.BackgroundTransparency = 1
-                img.Position = UDim2.new(1, -38, 0, 5)
-                img.Size = UDim2.new(0, 32, 0, 32)
-                img.Image = content
-            end)
-
-            btn.MouseButton1Click:Connect(function()
-                selectedTarget = p
-                for _, b in ipairs(PlayerScroll:GetChildren()) do
-                    if b:IsA("TextButton") then b.BackgroundColor3 = Color3.fromRGB(30, 30, 42) end
-                end
-                btn.BackgroundColor3 = Color3.fromRGB(0, 160, 100)
-            end)
+    pcall(function()
+        for _, child in ipairs(PlayerScroll:GetChildren()) do
+            if child:IsA("TextButton") then child:Destroy() end
         end
-    end
-    PlayerScroll.CanvasSize = UDim2.new(0, 0, 0, #Players:GetPlayers() * 47)
+        for _, p in ipairs(Players:GetPlayers()) do
+            if p ~= LocalPlayer then
+                local btn = Instance.new("TextButton", PlayerScroll)
+                btn.BackgroundColor3 = (selectedTarget == p) and Color3.fromRGB(0, 160, 100) or Color3.fromRGB(30, 30, 42)
+                btn.Size = UDim2.new(1, 0, 0, 42)
+                btn.Text = ""
+                Instance.new("UICorner", btn).CornerRadius = UDim.new(0, 5)
+                
+                local nameLbl = Instance.new("TextLabel", btn)
+                nameLbl.BackgroundTransparency = 1
+                nameLbl.Position = UDim2.new(0, 10, 0, 4)
+                nameLbl.Size = UDim2.new(1, -50, 0, 18)
+                nameLbl.Font = Enum.Font.GothamBold
+                nameLbl.Text = p.Name
+                nameLbl.TextColor3 = Color3.fromRGB(255, 255, 255)
+                nameLbl.TextSize = 12
+                nameLbl.TextXAlignment = Enum.TextXAlignment.Left
+                
+                local idLbl = Instance.new("TextLabel", btn)
+                idLbl.BackgroundTransparency = 1
+                idLbl.Position = UDim2.new(0, 10, 0, 20)
+                idLbl.Size = UDim2.new(1, -50, 0, 16)
+                idLbl.Font = Enum.Font.Gotham
+                idLbl.Text = "ID: " .. p.UserId
+                idLbl.TextColor3 = Color3.fromRGB(150, 150, 170)
+                idLbl.TextSize = 10
+                idLbl.TextXAlignment = Enum.TextXAlignment.Left
+
+                btn.MouseButton1Click:Connect(function()
+                    selectedTarget = p
+                    for _, b in ipairs(PlayerScroll:GetChildren()) do
+                        if b:IsA("TextButton") then b.BackgroundColor3 = Color3.fromRGB(30, 30, 42) end
+                    end
+                    btn.BackgroundColor3 = Color3.fromRGB(0, 160, 100)
+                end)
+            end
+        end
+        PlayerScroll.CanvasSize = UDim2.new(0, 0, 0, #Players:GetPlayers() * 47)
+    end)
 end
 
 refreshServerList()
@@ -466,13 +464,15 @@ ResetBtn.MouseButton1Click:Connect(refreshServerList)
 TeleBtn.MouseButton1Click:Connect(function()
     pcall(function()
         if selectedTarget and selectedTarget.Character and selectedTarget.Character:FindFirstChild("HumanoidRootPart") then
-            local myChar = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
-            local myRoot = myChar:WaitForChild("HumanoidRootPart", 2)
-            if myRoot then
-                myRoot.CFrame = selectedTarget.Character.HumanoidRootPart.CFrame * CFrame.new(0, 3, 2)
+            local myChar = LocalPlayer.Character
+            if myChar then
+                local myRoot = myChar:FindFirstChild("HumanoidRootPart")
+                if myRoot then
+                    myRoot.CFrame = selectedTarget.Character.HumanoidRootPart.CFrame * CFrame.new(0, 3, 2)
+                end
             end
         end
     end)
 end)
 
-print("Đã tải xong Menu Ultimate Fixed chuẩn xác 100% trên Delta X!")
+print("⚡ DELTA X - ULTIMATE FIXED MENU đã sẵn sàng hoạt động hoàn hảo 100%!")
