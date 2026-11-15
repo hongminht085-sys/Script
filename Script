@@ -1,5 +1,5 @@
 -- ============================================================================
--- TUẤN MÈO - FULL UTILITY, HITBOX & SPINBOT EDITION (DELTA X EXCLUSIVE)
+-- TUẤN MÈO - GOD MODE & ULTRA FARM (MAX PRO EDITION - DELTA X EXCLUSIVE)
 -- ============================================================================
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
@@ -7,12 +7,12 @@ local CoreGui = game:GetService("CoreGui")
 local UserInputService = game:GetService("UserInputService")
 local LocalPlayer = Players.LocalPlayer
 
-if CoreGui:FindFirstChild("TuanMeoFull") then
-    CoreGui.TuanMeoFull:Destroy()
+if CoreGui:FindFirstChild("TuanMeoMaxPro") then
+    CoreGui.TuanMeoMaxPro:Destroy()
 end
 
 local ScreenGui = Instance.new("ScreenGui")
-ScreenGui.Name = "TuanMeoFull"
+ScreenGui.Name = "TuanMeoMaxPro"
 ScreenGui.Parent = CoreGui
 ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
@@ -21,7 +21,7 @@ MainFrame.Name = "MainFrame"
 MainFrame.Parent = ScreenGui
 MainFrame.BackgroundColor3 = Color3.fromRGB(16, 16, 22)
 MainFrame.Position = UDim2.new(0.5, -235, 0.5, -240)
-MainFrame.Size = UDim2.new(0, 470, 0, 520)
+MainFrame.Size = UDim2.new(0, 470, 0, 540)
 MainFrame.BorderSizePixel = 0
 MainFrame.Active = true
 MainFrame.Draggable = true
@@ -44,7 +44,7 @@ TitleText.BackgroundTransparency = 1
 TitleText.Position = UDim2.new(0, 15, 0, 0)
 TitleText.Size = UDim2.new(1, -30, 1, 0)
 TitleText.Font = Enum.Font.GothamBold
-TitleText.Text = "🐱 TUẤN MÈO - FULL UTILITY & SPINBOT 🐱"
+TitleText.Text = "🐱 TUẤN MÈO - MAX PRO GOD MODE 🐱"
 TitleText.TextColor3 = Color3.fromRGB(255, 140, 0)
 TitleText.TextSize = 11
 TitleText.TextXAlignment = Enum.TextXAlignment.Left
@@ -71,7 +71,7 @@ Container.Parent = MainFrame
 Container.BackgroundTransparency = 1
 Container.Position = UDim2.new(0, 15, 0, 50)
 Container.Size = UDim2.new(1, -30, 1, -60)
-Container.CanvasSize = UDim2.new(0, 0, 10.5, 0)
+Container.CanvasSize = UDim2.new(0, 0, 12.5, 0)
 Container.ScrollBarThickness = 4
 
 local UIListLayout = Instance.new("UIListLayout")
@@ -140,7 +140,7 @@ RunService.RenderStepped:Connect(function()
 end)
 
 --------------------------------------------------------------------------------
--- 2. XUYÊN TƯỜNG (NOCLIP)
+-- 2. XUYÊN TƯỜNG (FIX CHUẨN GIỮ MẶT ĐẤT, KHÔNG THỌT XUỐNG DƯỚI)
 --------------------------------------------------------------------------------
 local NoclipSection = Instance.new("Frame", Container)
 NoclipSection.BackgroundColor3 = Color3.fromRGB(22, 22, 30)
@@ -148,7 +148,7 @@ NoclipSection.Size = UDim2.new(1, 0, 0, 50)
 Instance.new("UICorner", NoclipSection).CornerRadius = UDim.new(0, 8)
 
 local noclipActive = false
-local NoclipBtn = createToggleBtn(NoclipSection, "👻 Xuyên Tường", UDim2.new(0, 12, 0, 10), UDim2.new(1, -24, 0, 30))
+local NoclipBtn = createToggleBtn(NoclipSection, "👻 Xuyên Tường (Chuẩn Mặt Đất)", UDim2.new(0, 12, 0, 10), UDim2.new(1, -24, 0, 30))
 
 NoclipBtn.MouseButton1Click:Connect(function()
     noclipActive = not noclipActive
@@ -162,7 +162,9 @@ RunService.Stepped:Connect(function()
             local char = LocalPlayer.Character
             if char then
                 for _, part in ipairs(char:GetDescendants()) do
-                    if part:IsA("BasePart") then part.CanCollide = false end
+                    if part:IsA("BasePart") and part.Name ~= "HumanoidRootPart" then
+                        part.CanCollide = false
+                    end
                 end
             end
         end)
@@ -170,7 +172,7 @@ RunService.Stepped:Connect(function()
 end)
 
 --------------------------------------------------------------------------------
--- 3. CỨU MỆNH YẾU MÁU
+-- 3. CỨU MỆNH NÉ ĐẠN CAO 500 STUDS (KIỂM TRA CẦM VẬT PHẨM MỚI KÍCH HOẠT)
 --------------------------------------------------------------------------------
 local EmergencySection = Instance.new("Frame", Container)
 EmergencySection.BackgroundColor3 = Color3.fromRGB(22, 22, 30)
@@ -178,29 +180,19 @@ EmergencySection.Size = UDim2.new(1, 0, 0, 50)
 Instance.new("UICorner", EmergencySection).CornerRadius = UDim.new(0, 8)
 
 local emergencyActive = false
-local EmergencyBtn = createToggleBtn(EmergencySection, "🚨 Cứu Mệnh Yếu Máu", UDim2.new(0, 12, 0, 10), UDim2.new(1, -24, 0, 30))
+local EmergencyBtn = createToggleBtn(EmergencySection, "🚨 Cứu Mệnh Né Đạn (Cần Cầm Súng)", UDim2.new(0, 12, 0, 10), UDim2.new(1, -24, 0, 30))
 
 EmergencyBtn.MouseButton1Click:Connect(function()
     emergencyActive = not emergencyActive
     EmergencyBtn.BackgroundColor3 = emergencyActive and Color3.fromRGB(45, 185, 95) or Color3.fromRGB(200, 50, 50)
-    EmergencyBtn.Text = emergencyActive and "🚨 Cứu Mệnh Yếu Máu: BẬT" or "🚨 Cứu Mệnh Yếu Máu: TẮT"
+    EmergencyBtn.Text = emergencyActive and "🚨 Cứu Mệnh: BẬT" or "🚨 Cứu Mệnh: TẮT"
 end)
-
-local RedGui = Instance.new("ScreenGui", CoreGui)
-RedGui.Name = "EmergencyRedScreen"
-RedGui.IgnoreGuiInset = true
-local RedFrame = Instance.new("Frame", RedGui)
-RedFrame.Size = UDim2.new(1, 0, 1, 0)
-RedFrame.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
-RedFrame.BackgroundTransparency = 1
-RedFrame.BorderSizePixel = 0
-RedFrame.ZIndex = 999
 
 local isEscaping = false
 local savedPosition = nil
 
 RunService.RenderStepped:Connect(function()
-    if not emergencyActive then RedFrame.BackgroundTransparency = 1 return end
+    if not emergencyActive then return end
     pcall(function()
         local char = LocalPlayer.Character
         if not char then return end
@@ -208,29 +200,24 @@ RunService.RenderStepped:Connect(function()
         local root = char:FindFirstChild("HumanoidRootPart")
         if not hum or not root then return end
         
+        local holdingTool = char:FindFirstChildOfClass("Tool") ~= nil
         local healthPercent = hum.Health / hum.MaxHealth
-        if healthPercent <= 0.30 and healthPercent > 0 and not isEscaping then
+        
+        if healthPercent <= 0.30 and healthPercent > 0 and holdingTool and not isEscaping then
             isEscaping = true
             savedPosition = root.CFrame
-            for _, tool in ipairs(char:GetChildren()) do
-                if tool:IsA("Tool") then tool.Parent = LocalPlayer.Backpack end
-            end
-            local skyPosition = savedPosition + Vector3.new(0, 150, 0)
+            local skyPosition = savedPosition + Vector3.new(0, 500, 0)
             hum.PlatformStand = true
             root.Velocity = Vector3.new(0, 0, 0)
-            root.CFrame = skyPosition * CFrame.Angles(math.rad(90), 0, 0)
+            root.CFrame = skyPosition
         elseif isEscaping then
-            RedFrame.BackgroundTransparency = 0.82
             root.Velocity = Vector3.new(0, 0, 0)
-            root.CFrame = CFrame.new(root.Position.X, savedPosition.Y + 150, root.Position.Z) * CFrame.Angles(math.rad(90), 0, 0)
+            root.CFrame = CFrame.new(root.Position.X, savedPosition.Y + 500, root.Position.Z)
             if healthPercent >= 0.85 or hum.Health <= 0 then
                 isEscaping = false
                 hum.PlatformStand = false
-                RedFrame.BackgroundTransparency = 1
                 if savedPosition and root then root.CFrame = savedPosition end
             end
-        else
-            RedFrame.BackgroundTransparency = 1
         end
     end)
 end)
@@ -309,7 +296,67 @@ RunService.RenderStepped:Connect(function()
 end)
 
 --------------------------------------------------------------------------------
--- 5. XOAY NHÂN VẬT (SPINBOT DI CHUYỂN BÌNH THƯỜNG + TÙY CHỈNH TỐC ĐỘ)
+-- 5. CHỨC NĂNG BAY MỚI (ĐỨNG ĐI LẠI TRÊN KHÔNG + SPACE/SHIFT LÊN XUỐNG)
+--------------------------------------------------------------------------------
+local FlySection = Instance.new("Frame", Container)
+FlySection.BackgroundColor3 = Color3.fromRGB(22, 22, 30)
+FlySection.Size = UDim2.new(1, 0, 0, 75)
+Instance.new("UICorner", FlySection).CornerRadius = UDim.new(0, 8)
+
+local FlyText = Instance.new("TextLabel", FlySection)
+FlyText.BackgroundTransparency = 1
+FlyText.Position = UDim2.new(0, 12, 0, 6)
+FlyText.Size = UDim2.new(1, -24, 0, 20)
+FlyText.Font = Enum.Font.GothamBold
+FlyText.Text = "🛸 Bay Tự Do Trên Không (Space/Shift lên xuống)"
+FlyText.TextColor3 = Color3.fromRGB(255, 255, 255)
+FlyText.TextSize = 11
+FlyText.TextXAlignment = Enum.TextXAlignment.Left
+
+local flyActive = false
+local FlyBtn = createToggleBtn(FlySection, "🛸 Bay Tự Do", UDim2.new(0, 12, 0, 30), UDim2.new(1, -24, 0, 35))
+
+FlyBtn.MouseButton1Click:Connect(function()
+    flyActive = not flyActive
+    FlyBtn.BackgroundColor3 = flyActive and Color3.fromRGB(45, 185, 95) or Color3.fromRGB(200, 50, 50)
+    FlyBtn.Text = flyActive and "🛸 Bay Tự Do: BẬT" or "🛸 Bay Tự Do: TẮT"
+end)
+
+RunService.RenderStepped:Connect(function()
+    pcall(function()
+        local char = LocalPlayer.Character
+        if not char then return end
+        local root = char:FindFirstChild("HumanoidRootPart")
+        local hum = char:FindFirstChildOfClass("Humanoid")
+        if not root or not hum then return end
+
+        if flyActive then
+            hum.PlatformStand = true
+            local cam = workspace.CurrentCamera
+            local moveDir = Vector3.new(0, 0, 0)
+            local look = cam.CFrame.LookVector
+            local right = cam.CFrame.RightVector
+
+            if UserInputService:IsKeyDown(Enum.KeyCode.W) then moveDir = moveDir + Vector3.new(look.X, 0, look.Z).Unit end
+            if UserInputService:IsKeyDown(Enum.KeyCode.S) then moveDir = moveDir - Vector3.new(look.X, 0, look.Z).Unit end
+            if UserInputService:IsKeyDown(Enum.KeyCode.A) then moveDir = moveDir - right end
+            if UserInputService:IsKeyDown(Enum.KeyCode.D) then moveDir = moveDir + right end
+            if UserInputService:IsKeyDown(Enum.KeyCode.Space) then moveDir = moveDir + Vector3.new(0, 1, 0) end
+            if UserInputService:IsKeyDown(Enum.KeyCode.LeftShift) then moveDir = moveDir - Vector3.new(0, 1, 0) end
+
+            if moveDir.Magnitude > 0 then
+                root.Velocity = moveDir.Unit * 50
+            else
+                root.Velocity = Vector3.new(0, 0, 0)
+            end
+        else
+            if hum.PlatformStand then hum.PlatformStand = false end
+        end
+    end)
+end)
+
+--------------------------------------------------------------------------------
+-- 6. XOAY NHÂN VẬT (SPINBOT DI CHUYỂN BÌNH THƯỜNG + CHỈNH TỐC ĐỘ)
 --------------------------------------------------------------------------------
 local SpinSection = Instance.new("Frame", Container)
 SpinSection.BackgroundColor3 = Color3.fromRGB(22, 22, 30)
@@ -343,12 +390,7 @@ Instance.new("UICorner", SpinBox).CornerRadius = UDim.new(0, 6)
 
 SpinBox.FocusLost:Connect(function()
     local val = tonumber(SpinBox.Text:match("[%d%-]+"))
-    if val then
-        spinSpeed = val
-        SpinBox.Text = "Tốc độ: " .. spinSpeed
-    else
-        SpinBox.Text = "Tốc độ: " .. spinSpeed
-    end
+    if val then spinSpeed = val SpinBox.Text = "Tốc độ: " .. spinSpeed end
 end)
 
 SpinBtn.MouseButton1Click:Connect(function()
@@ -369,7 +411,7 @@ RunService.RenderStepped:Connect(function()
 end)
 
 --------------------------------------------------------------------------------
--- 6. AIMBOT VÒNG TRÒN FOV
+-- 7. AIMBOT VÒNG TRÒN FOV RÕ NÉT
 --------------------------------------------------------------------------------
 local AimbotSection = Instance.new("Frame", Container)
 AimbotSection.BackgroundColor3 = Color3.fromRGB(22, 22, 30)
@@ -406,7 +448,7 @@ fovCircle.Thickness = 2
 fovCircle.NumSides = 64
 fovCircle.Radius = fovRadius
 fovCircle.Filled = false
-fovCircle.Color = Color3.fromRGB(255, 140, 0)
+fovCircle.Color = Color3.fromRGB(0, 243, 255)
 fovCircle.Transparency = 1
 fovCircle.Visible = false
 
@@ -464,7 +506,7 @@ RunService.RenderStepped:Connect(function()
 end)
 
 --------------------------------------------------------------------------------
--- 7. TÍNH NĂNG HITBOX CHUẨN
+-- 8. TĂNG HITBOX ĐỎ LÊN TỚI 100 (CÓ SELECTIONBOX ĐỎ RỰC)
 --------------------------------------------------------------------------------
 local HitboxSection = Instance.new("Frame", Container)
 HitboxSection.BackgroundColor3 = Color3.fromRGB(22, 22, 30)
@@ -476,13 +518,13 @@ HBText.BackgroundTransparency = 1
 HBText.Position = UDim2.new(0, 12, 0, 6)
 HBText.Size = UDim2.new(1, -24, 0, 20)
 HBText.Font = Enum.Font.GothamBold
-HBText.Text = "🎯 Tăng Hitbox (Không phồng người - Max 5)"
+HBText.Text = "🔴 Hitbox Đỏ (Tùy chỉnh Max 100)"
 HBText.TextColor3 = Color3.fromRGB(255, 255, 255)
 HBText.TextSize = 11
 HBText.TextXAlignment = Enum.TextXAlignment.Left
 
 local isHitboxEnabled = false
-local hitboxSize = 3
+local hitboxSize = 5
 local originalData = {}
 
 local function ResetAllHitboxes()
@@ -493,7 +535,8 @@ local function ResetAllHitboxes()
                     data.hrp.Size = data.hrpSize
                     data.hrp.Transparency = data.hrpTrans
                     data.hrp.CanCollide = data.hrpCollide
-                    data.hrp.Massless = data.hrpMassless
+                    local box = data.hrp:FindFirstChild("TuanMeoRedBox")
+                    if box then box:Destroy() end
                 end
             end)
         end
@@ -501,14 +544,14 @@ local function ResetAllHitboxes()
     originalData = {}
 end
 
-local HBBtn = createToggleBtn(HitboxSection, "🎯 Tăng Hitbox", UDim2.new(0, 12, 0, 28), UDim2.new(0.48, 0, 0, 28))
+local HBBtn = createToggleBtn(HitboxSection, "🔴 Hitbox Đỏ", UDim2.new(0, 12, 0, 28), UDim2.new(0.48, 0, 0, 28))
 
 local HBBox = Instance.new("TextBox", HitboxSection)
 HBBox.BackgroundColor3 = Color3.fromRGB(32, 32, 46)
 HBBox.Position = UDim2.new(0.51, 0, 0, 28)
 HBBox.Size = UDim2.new(0.49, -12, 0, 28)
 HBBox.Font = Enum.Font.Gotham
-HBBox.Text = "Size: 3"
+HBBox.Text = "Size: 5"
 HBBox.TextColor3 = Color3.fromRGB(255, 140, 0)
 HBBox.TextSize = 11
 Instance.new("UICorner", HBBox).CornerRadius = UDim.new(0, 6)
@@ -516,7 +559,7 @@ Instance.new("UICorner", HBBox).CornerRadius = UDim.new(0, 6)
 HBBox.FocusLost:Connect(function()
     local val = tonumber(HBBox.Text:match("[%d%.]+"))
     if val and val > 0 then
-        hitboxSize = math.clamp(val, 1, 5)
+        hitboxSize = math.clamp(val, 1, 100)
         HBBox.Text = "Size: " .. hitboxSize
     else
         HBBox.Text = "Size: " .. hitboxSize
@@ -526,7 +569,7 @@ end)
 HBBtn.MouseButton1Click:Connect(function()
     isHitboxEnabled = not isHitboxEnabled
     HBBtn.BackgroundColor3 = isHitboxEnabled and Color3.fromRGB(45, 185, 95) or Color3.fromRGB(200, 50, 50)
-    HBBtn.Text = isHitboxEnabled and "🎯 Tăng Hitbox: BẬT" or "🎯 Tăng Hitbox: TẮT"
+    HBBtn.Text = isHitboxEnabled and "🔴 Hitbox Đỏ: BẬT" or "🔴 Hitbox Đỏ: TẮT"
     if not isHitboxEnabled then ResetAllHitboxes() end
 end)
 
@@ -545,21 +588,29 @@ RunService.RenderStepped:Connect(function()
                             hrp = hrp,
                             hrpSize = hrp.Size,
                             hrpTrans = hrp.Transparency,
-                            hrpCollide = hrp.CanCollide,
-                            hrpMassless = hrp.Massless
+                            hrpCollide = hrp.CanCollide
                         }
                     end
                     hrp.Size = Vector3.new(hitboxSize, hitboxSize, hitboxSize)
-                    hrp.Transparency = 0.75
+                    hrp.Transparency = 0.8
                     hrp.CanCollide = false
-                    hrp.Massless = true
+                    
+                    local box = hrp:FindFirstChild("TuanMeoRedBox")
+                    if not box then
+                        local sel = Instance.new("SelectionBox", hrp)
+                        sel.Name = "TuanMeoRedBox"
+                        sel.Adornee = hrp
+                        sel.Color3 = Color3.fromRGB(255, 0, 0)
+                        sel.LineThickness = 0.05
+                    end
                 else
                     if originalData[p] then
                         if hrp and hrp.Parent then
                             hrp.Size = originalData[p].hrpSize
                             hrp.Transparency = originalData[p].hrpTrans
                             hrp.CanCollide = originalData[p].hrpCollide
-                            hrp.Massless = originalData[p].hrpMassless
+                            local box = hrp:FindFirstChild("TuanMeoRedBox")
+                            if box then box:Destroy() end
                         end
                         originalData[p] = nil
                     end
@@ -570,7 +621,7 @@ RunService.RenderStepped:Connect(function()
 end)
 
 --------------------------------------------------------------------------------
--- 8. AIM KILL THÀNH ĐẠT MANG QUA
+-- 9. AIM KILL (NẰM NGANG ÚP ĐẦU + TIMEOUT 15S)
 --------------------------------------------------------------------------------
 local AimKillSection = Instance.new("Frame", Container)
 AimKillSection.BackgroundColor3 = Color3.fromRGB(22, 22, 30)
@@ -651,7 +702,7 @@ task.spawn(function()
 end)
 
 --------------------------------------------------------------------------------
--- 9. FARM KILL (ĐẤM TAY CẬN CHIẾN)
+-- 10. FARM KILL (DƯỚI ĐẤT - ÚP MẶT LÊN TRỜI, KHÔNG THÒI ĐẦU, BÁM DÍNH CHUẨN)
 --------------------------------------------------------------------------------
 local FarmKillSection = Instance.new("Frame", Container)
 FarmKillSection.BackgroundColor3 = Color3.fromRGB(22, 22, 30)
@@ -659,7 +710,7 @@ FarmKillSection.Size = UDim2.new(1, 0, 0, 50)
 Instance.new("UICorner", FarmKillSection).CornerRadius = UDim.new(0, 8)
 
 local farmKillActive = false
-local FarmKillBtn = createToggleBtn(FarmKillSection, "🥊 Farm Kill (Đấm Dưới Lòng Đất)", UDim2.new(0, 12, 0, 10), UDim2.new(1, -24, 0, 30))
+local FarmKillBtn = createToggleBtn(FarmKillSection, "🥊 Farm Kill (Dưới Đất - Úp Mặt Lên)", UDim2.new(0, 12, 0, 10), UDim2.new(1, -24, 0, 30))
 
 FarmKillBtn.MouseButton1Click:Connect(function()
     farmKillActive = not farmKillActive
@@ -694,7 +745,8 @@ task.spawn(function()
                                         if myRoot and tRoot and myHum then
                                             myHum.PlatformStand = true
                                             myRoot.Velocity = Vector3.new(0, 0, 0)
-                                            myRoot.CFrame = tRoot.CFrame * CFrame.new(0, -4, 0)
+                                            -- Dịch chuyển sâu dưới chân, ép xoay người úp mặt hướng thẳng lên trời (-90 độ trục X)
+                                            myRoot.CFrame = tRoot.CFrame * CFrame.new(0, -4, 0) * CFrame.Angles(math.rad(-90), 0, 0)
                                             
                                             local tool = myChar and myChar:FindFirstChildOfClass("Tool")
                                             if tool then
@@ -727,103 +779,94 @@ task.spawn(function()
 end)
 
 --------------------------------------------------------------------------------
--- 10. QUÉT CỬA HÀNG & CỬA XE
+-- 11. AUTO FARM: TỰ ĐỘNG ĐẠP CỬA -> MỞ RƯỞNG -> NHẶT ĐỒ TRONG RƯƠNG
 --------------------------------------------------------------------------------
-local ShopSection = Instance.new("Frame", Container)
-ShopSection.BackgroundColor3 = Color3.fromRGB(22, 22, 30)
-ShopSection.Size = UDim2.new(1, 0, 0, 180)
-Instance.new("UICorner", ShopSection).CornerRadius = UDim.new(0, 8)
+local AutoFarmSection = Instance.new("Frame", Container)
+AutoFarmSection.BackgroundColor3 = Color3.fromRGB(22, 22, 30)
+AutoFarmSection.Size = UDim2.new(1, 0, 0, 50)
+Instance.new("UICorner", AutoFarmSection).CornerRadius = UDim.new(0, 8)
 
-local ShopTitle = Instance.new("TextLabel", ShopSection)
-ShopTitle.BackgroundTransparency = 1
-ShopTitle.Position = UDim2.new(0, 12, 0, 6)
-ShopTitle.Size = UDim2.new(1, -24, 0, 20)
-ShopTitle.Font = Enum.Font.GothamBold
-ShopTitle.Text = "🏪 Quét Cửa Hàng & Cửa Xe Trong Map"
-ShopTitle.TextColor3 = Color3.fromRGB(255, 140, 0)
-ShopTitle.TextSize = 12
-ShopTitle.TextXAlignment = Enum.TextXAlignment.Left
+local autoFarmActive = false
+local AutoFarmBtn = createToggleBtn(AutoFarmSection, "🤖 Auto Farm (Đạp Cửa & Mở Rương)", UDim2.new(0, 12, 0, 10), UDim2.new(1, -24, 0, 30))
 
-local ScanShopBtn = Instance.new("TextButton", ShopSection)
-ScanShopBtn.BackgroundColor3 = Color3.fromRGB(0, 140, 200)
-ScanShopBtn.Position = UDim2.new(0, 12, 0, 30)
-ScanShopBtn.Size = UDim2.new(1, -24, 0, 28)
-ScanShopBtn.Font = Enum.Font.GothamBold
-ScanShopBtn.Text = "🔍 Quét Tìm Shop / Cửa Xe"
-ScanShopBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-ScanShopBtn.TextSize = 11
-Instance.new("UICorner", ScanShopBtn).CornerRadius = UDim.new(0, 6)
+AutoFarmBtn.MouseButton1Click:Connect(function()
+    autoFarmActive = not autoFarmActive
+    AutoFarmBtn.BackgroundColor3 = autoFarmActive and Color3.fromRGB(45, 185, 95) or Color3.fromRGB(200, 50, 50)
+    AutoFarmBtn.Text = autoFarmActive and "🤖 Auto Farm: BẬT" or "🤖 Auto Farm: TẮT"
+end)
 
-local ShopScroll = Instance.new("ScrollingFrame", ShopSection)
-ShopScroll.BackgroundColor3 = Color3.fromRGB(15, 15, 22)
-ShopScroll.Position = UDim2.new(0, 12, 0, 64)
-ShopScroll.Size = UDim2.new(1, -24, 0, 105)
-ShopScroll.CanvasSize = UDim2.new(0, 0, 0, 0)
-ShopScroll.ScrollBarThickness = 3
-Instance.new("UICorner", ShopScroll).CornerRadius = UDim.new(0, 6)
+task.spawn(function()
+    while true do
+        task.wait(0.5)
+        if autoFarmActive then
+            pcall(function()
+                local myRoot = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+                if not myRoot then return end
 
-local ShopListLayout = Instance.new("UIListLayout", ShopScroll)
-ShopListLayout.Padding = UDim.new(0, 3)
-
-local function scanShops()
-    pcall(function()
-        for _, child in ipairs(ShopScroll:GetChildren()) do
-            if child:IsA("TextButton") then child:Destroy() end
-        end
-        
-        local foundCount = 0
-        for _, obj in ipairs(workspace:GetDescendants()) do
-            if obj:IsA("BasePart") or obj:IsA("Model") then
-                local nameLower = obj.Name:lower()
-                if nameLower:find("shop") or nameLower:find("store") or nameLower:find("vendor") or nameLower:find("merchant") or nameLower:find("door") or nameLower:find("cardoor") or nameLower:find("vehicledoor") then
-                    foundCount = foundCount + 1
-                    local targetPart = obj:IsA("Model") and obj.PrimaryPart or obj
-                    if not targetPart and obj:IsA("Model") then
-                        targetPart = obj:FindFirstChildWhichIsA("BasePart")
-                    end
-                    
-                    if targetPart then
-                        local sBtn = Instance.new("TextButton", ShopScroll)
-                        sBtn.BackgroundColor3 = Color3.fromRGB(30, 30, 42)
-                        sBtn.Size = UDim2.new(1, 0, 0, 32)
-                        sBtn.Font = Enum.Font.GothamBold
-                        sBtn.Text = "🚪 " .. obj.Name .. " (Bấm để Tele)"
-                        sBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-                        sBtn.TextSize = 11
-                        Instance.new("UICorner", sBtn).CornerRadius = UDim.new(0, 5)
-                        
-                        sBtn.MouseButton1Click:Connect(function()
-                            pcall(function()
-                                local myRoot = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
-                                if myRoot then
-                                    myRoot.CFrame = targetPart.CFrame * CFrame.new(0, 3, 0)
-                                end
-                            end)
-                        end)
+                -- 1. TÌM CỬA TRONG NHÀ ĐỂ TỰ ĐỘNG ĐẠP / TƯƠNG TÁC MỞ
+                for _, obj in ipairs(workspace:GetDescendants()) do
+                    if not autoFarmActive then break end
+                    if obj:IsA("BasePart") or obj:IsA("Model") then
+                        local nameLower = obj.Name:lower()
+                        if nameLower:find("door") or nameLower:find("house_door") or nameLower:find("cửa") then
+                            local part = obj:IsA("Model") and (obj.PrimaryPart or obj:FindFirstChildWhichIsA("BasePart")) or obj
+                            if part and (myRoot.Position - part.Position).Magnitude < 150 then
+                                myRoot.CFrame = part.CFrame * CFrame.new(0, 0, 2)
+                                task.wait(0.3)
+                                pcall(function()
+                                    for _, prompt in ipairs(obj:GetDescendants()) do
+                                        if prompt:IsA("ProximityPrompt") then
+                                            fireproximityprompt(prompt)
+                                        elseif prompt:IsA("ClickDetector") then
+                                            fireclickdetector(prompt)
+                                        end
+                                    end
+                                end)
+                            end
+                        end
                     end
                 end
-            end
-        end
-        
-        if foundCount == 0 then
-            local emptyLbl = Instance.new("TextButton", ShopScroll)
-            emptyLbl.BackgroundColor3 = Color3.fromRGB(30, 30, 42)
-            emptyLbl.Size = UDim2.new(1, 0, 0, 32)
-            emptyLbl.Font = Enum.Font.Gotham
-            emptyLbl.Text = "⚠️ Không tìm thấy Shop hoặc Cửa xe nào!"
-            emptyLbl.TextColor3 = Color3.fromRGB(255, 100, 100)
-            emptyLbl.TextSize = 10
-            Instance.new("UICorner", emptyLbl).CornerRadius = UDim.new(0, 5)
-        end
-        
-        ShopScroll.CanvasSize = UDim2.new(0, 0, 0, math.max(#ShopScroll:GetChildren() * 35, 105))
-    end)
-end
 
-ScanShopBtn.MouseButton1Click:Connect(scanShops)
+                -- 2. TÌM RƯỞNG (CHEST / BOX) ĐỂ MỞ VÀ NHẶT ĐỒ
+                for _, obj in ipairs(workspace:GetDescendants()) do
+                    if not autoFarmActive then break end
+                    if obj:IsA("BasePart") or obj:IsA("Model") then
+                        local nameLower = obj.Name:lower()
+                        if nameLower:find("chest") or nameLower:find("box") or nameLower:find("loot") or nameLower:find("rương") then
+                            local part = obj:IsA("Model") and (obj.PrimaryPart or obj:FindFirstChildWhichIsA("BasePart")) or obj
+                            if part and (myRoot.Position - part.Position).Magnitude < 200 then
+                                myRoot.CFrame = part.CFrame * CFrame.new(0, 3, 0)
+                                task.wait(0.4)
+                                pcall(function()
+                                    for _, prompt in ipairs(obj:GetDescendants()) do
+                                        if prompt:IsA("ProximityPrompt") then
+                                            fireproximityprompt(prompt)
+                                        elseif prompt:IsA("ClickDetector") then
+                                            fireclickdetector(prompt)
+                                        end
+                                    end
+                                end)
+                                
+                                task.wait(0.3)
+                                for _, drop in ipairs(workspace:GetChildren()) do
+                                    if drop:IsA("Tool") or (drop:IsA("Model") and drop:FindFirstChild("Handle")) then
+                                        local dPart = drop:IsA("Tool") and drop.Handle or drop.PrimaryPart
+                                        if dPart and (myRoot.Position - dPart.Position).Magnitude < 15 then
+                                            dPart.CFrame = myRoot.CFrame
+                                        end
+                                    end
+                                end
+                            end
+                        end
+                    end
+                end
+            end)
+        end
+    end
+end)
 
 --------------------------------------------------------------------------------
--- 11. DỊCH CHUYỂN NGƯỜI CHƠI (TELEVIP)
+-- 12. DỊCH CHUYỂN NGƯỜI CHƠI (TELEVIP)
 --------------------------------------------------------------------------------
 local ListSection = Instance.new("Frame", Container)
 ListSection.BackgroundColor3 = Color3.fromRGB(22, 22, 30)
@@ -926,4 +969,4 @@ TeleBtn.MouseButton1Click:Connect(function()
     end)
 end)
 
-print("🐱 TUẤN MÈO - FULL UTILITY & SPINBOT EDITION ĐÃ SẴN SÀNG!")
+print("🐱 TUẤN MÈO - MAX PRO GOD MODE ĐÃ SẴN SÀNG!")
