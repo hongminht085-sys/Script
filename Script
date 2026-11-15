@@ -1,5 +1,5 @@
 -- ============================================================================
--- TUẤN MÈO - ULTIMATE MOBILE EDITION (DELTA X EXCLUSIVE)
+-- TUẤN MÈO - ULTIMATE GOD FIX (DELTA X EXCLUSIVE)
 -- ============================================================================
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
@@ -7,12 +7,12 @@ local CoreGui = game:GetService("CoreGui")
 local UserInputService = game:GetService("UserInputService")
 local LocalPlayer = Players.LocalPlayer
 
-if CoreGui:FindFirstChild("TuanMeoUltimateMobile") then
-    CoreGui.TuanMeoUltimateMobile:Destroy()
+if CoreGui:FindFirstChild("TuanMeoUltimateGodFix") then
+    CoreGui.TuanMeoUltimateGodFix:Destroy()
 end
 
 local ScreenGui = Instance.new("ScreenGui")
-ScreenGui.Name = "TuanMeoUltimateMobile"
+ScreenGui.Name = "TuanMeoUltimateGodFix"
 ScreenGui.Parent = CoreGui
 ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
@@ -44,7 +44,7 @@ TitleText.BackgroundTransparency = 1
 TitleText.Position = UDim2.new(0, 15, 0, 0)
 TitleText.Size = UDim2.new(1, -30, 1, 0)
 TitleText.Font = Enum.Font.GothamBold
-TitleText.Text = "🐱 TUẤN MÈO - ULTIMATE MOBILE EDITION 🐱"
+TitleText.Text = "🐱 TUẤN MÈO - ULTIMATE GOD FIX 🐱"
 TitleText.TextColor3 = Color3.fromRGB(255, 140, 0)
 TitleText.TextSize = 11
 TitleText.TextXAlignment = Enum.TextXAlignment.Left
@@ -140,7 +140,7 @@ RunService.RenderStepped:Connect(function()
 end)
 
 --------------------------------------------------------------------------------
--- 2. XUYÊN TƯỜNG (GIỮ MẶT ĐẤT)
+-- 2. XUYÊN TƯỜNG (NOCLIP HOÀN HẢO)
 --------------------------------------------------------------------------------
 local NoclipSection = Instance.new("Frame", Container)
 NoclipSection.BackgroundColor3 = Color3.fromRGB(22, 22, 30)
@@ -148,7 +148,7 @@ NoclipSection.Size = UDim2.new(1, 0, 0, 50)
 Instance.new("UICorner", NoclipSection).CornerRadius = UDim.new(0, 8)
 
 local noclipActive = false
-local NoclipBtn = createToggleBtn(NoclipSection, "👻 Xuyên Tường (Giữ Mặt Đất)", UDim2.new(0, 12, 0, 10), UDim2.new(1, -24, 0, 30))
+local NoclipBtn = createToggleBtn(NoclipSection, "👻 Xuyên Tường (Ultimate)", UDim2.new(0, 12, 0, 10), UDim2.new(1, -24, 0, 30))
 
 NoclipBtn.MouseButton1Click:Connect(function()
     noclipActive = not noclipActive
@@ -162,7 +162,7 @@ RunService.Stepped:Connect(function()
             local char = LocalPlayer.Character
             if char then
                 for _, part in ipairs(char:GetDescendants()) do
-                    if part:IsA("BasePart") and part.Name ~= "HumanoidRootPart" then
+                    if part:IsA("BasePart") then
                         part.CanCollide = false
                     end
                 end
@@ -172,7 +172,7 @@ RunService.Stepped:Connect(function()
 end)
 
 --------------------------------------------------------------------------------
--- 3. CỨU MỆNH NÉ ĐẠN CAO 500 STUDS (ƯU TIÊN CAO NHẤT KHI YẾU MÁU)
+-- 3. CỨU MỆNH NÉ ĐẠN CAO 500 STUDS (ƯU TIÊN TUYỆT ĐỐI)
 --------------------------------------------------------------------------------
 local EmergencySection = Instance.new("Frame", Container)
 EmergencySection.BackgroundColor3 = Color3.fromRGB(22, 22, 30)
@@ -223,7 +223,7 @@ RunService.RenderStepped:Connect(function()
 end)
 
 --------------------------------------------------------------------------------
--- 4. ESP TÊN & KHUNG BOX
+-- 4. ESP TÊN & KHUNG BOX (HIỂN THỊ CỰC KỲ RÕ NÉT)
 --------------------------------------------------------------------------------
 local ESPSection = Instance.new("Frame", Container)
 ESPSection.BackgroundColor3 = Color3.fromRGB(22, 22, 30)
@@ -272,7 +272,7 @@ RunService.RenderStepped:Connect(function()
                     local myRoot = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
                     local dist = myRoot and math.floor((root.Position - myRoot.Position).Magnitude) or 0
                     if tag:FindFirstChild("Info") then
-                        tag.Info.Text = "👤 " + p.Name + " [" + dist + "m]" -- Lua concatenation handled below
+                        tag.Info.Text = "👤 " .. p.Name .. " [" .. dist .. "m]"
                     end
                     tag.Enabled = true
 
@@ -296,7 +296,7 @@ RunService.RenderStepped:Connect(function()
 end)
 
 --------------------------------------------------------------------------------
--- 5. CHỨC NĂNG BAY (CÓ NÚT LÊN / XUỐNG ẢO TRÊN MÀN HÌNH MOBILE)
+-- 5. CHỨC NĂNG BAY (FIX DI CHUYỂN & KHÔNG BỊ KẸT PHÍM LÊN/XUỐNG)
 --------------------------------------------------------------------------------
 local FlySection = Instance.new("Frame", Container)
 FlySection.BackgroundColor3 = Color3.fromRGB(22, 22, 30)
@@ -308,7 +308,7 @@ FlyText.BackgroundTransparency = 1
 FlyText.Position = UDim2.new(0, 12, 0, 6)
 FlyText.Size = UDim2.new(1, -24, 0, 20)
 FlyText.Font = Enum.Font.GothamBold
-FlyText.Text = "🛸 Bay Tự Do (Có nút Lên/Xuống trên màn hình)"
+FlyText.Text = "🛸 Bay Tự Do (Nút Lên/Xuống Chuẩn Mobile)"
 FlyText.TextColor3 = Color3.fromRGB(255, 255, 255)
 FlyText.TextSize = 11
 FlyText.TextXAlignment = Enum.TextXAlignment.Left
@@ -316,7 +316,6 @@ FlyText.TextXAlignment = Enum.TextXAlignment.Left
 local flyActive = false
 local FlyBtn = createToggleBtn(FlySection, "🛸 Bay Tự Do", UDim2.new(0, 12, 0, 30), UDim2.new(1, -24, 0, 35))
 
--- Tạo cụm nút ⬆️ ⬇️ điều khiển độ cao trực tiếp trên màn hình Mobile
 local UpDownGui = Instance.new("ScreenGui", CoreGui)
 UpDownGui.Name = "FlyUpDownControls"
 UpDownGui.Enabled = false
@@ -354,9 +353,28 @@ FlyBtn.MouseButton1Click:Connect(function()
     FlyBtn.BackgroundColor3 = flyActive and Color3.fromRGB(45, 185, 95) or Color3.fromRGB(200, 50, 50)
     FlyBtn.Text = flyActive and "🛸 Bay Tự Do: BẬT" or "🛸 Bay Tự Do: TẮT"
     UpDownGui.Enabled = flyActive
+    
+    if not flyActive then
+        isGoingUp = false
+        isGoingDown = false
+        pcall(function()
+            local char = LocalPlayer.Character
+            if char then
+                local hum = char:FindFirstChildOfClass("Humanoid")
+                if hum then hum.PlatformStand = false end
+                local root = char:FindFirstChild("HumanoidRootPart")
+                if root then
+                    for _, v in ipairs(root:GetChildren()) do
+                        if v.Name == "TuanMeoFlyVel" or v.Name == "TuanMeoFlyGyro" then v:Destroy() end
+                    end
+                end
+            end
+        end)
+    end
 end)
 
 RunService.RenderStepped:Connect(function()
+    if not flyActive then return end
     pcall(function()
         local char = LocalPlayer.Character
         if not char then return end
@@ -364,27 +382,44 @@ RunService.RenderStepped:Connect(function()
         local hum = char:FindFirstChildOfClass("Humanoid")
         if not root or not hum then return end
 
-        if flyActive then
-            hum.PlatformStand = true
-            local cam = workspace.CurrentCamera
-            local moveDir = Vector3.new(0, 0, 0)
-            local look = cam.CFrame.LookVector
-            local right = cam.CFrame.RightVector
-
-            if UserInputService:IsKeyDown(Enum.KeyCode.W) then moveDir = moveDir + Vector3.new(look.X, 0, look.Z).Unit end
-            if UserInputService:IsKeyDown(Enum.KeyCode.S) then moveDir = moveDir - Vector3.new(look.X, 0, look.Z).Unit end
-            if UserInputService:IsKeyDown(Enum.KeyCode.A) then moveDir = moveDir - right end
-            if UserInputService:IsKeyDown(Enum.KeyCode.D) then moveDir = moveDir + right end
-            if UserInputService:IsKeyDown(Enum.KeyCode.Space) or isGoingUp then moveDir = moveDir + Vector3.new(0, 1, 0) end
-            if UserInputService:IsKeyDown(Enum.KeyCode.LeftShift) or isGoingDown then moveDir = moveDir - Vector3.new(0, 1, 0) end
-
-            if moveDir.Magnitude > 0 then
-                root.Velocity = moveDir.Unit * 50
-            else
-                root.Velocity = Vector3.new(0, 0, 0)
-            end
+        hum.PlatformStand = true
+        
+        local vel = root:FindFirstChild("TuanMeoFlyVel")
+        if not vel then
+            vel = Instance.new("BodyVelocity")
+            vel.Name = "TuanMeoFlyVel"
+            vel.MaxForce = Vector3.new(math.huge, math.huge, math.huge)
+            vel.Velocity = Vector3.new(0, 0, 0)
+            vel.Parent = root
+        end
+        
+        local gyro = root:FindFirstChild("TuanMeoFlyGyro")
+        if not gyro then
+            gyro = Instance.new("BodyGyro")
+            gyro.Name = "TuanMeoFlyGyro"
+            gyro.MaxTorque = Vector3.new(math.huge, math.huge, math.huge)
+            gyro.CFrame = workspace.CurrentCamera.CFrame
+            gyro.Parent = root
         else
-            if hum.PlatformStand then hum.PlatformStand = false end
+            gyro.CFrame = workspace.CurrentCamera.CFrame
+        end
+
+        local cam = workspace.CurrentCamera
+        local moveDir = Vector3.new(0, 0, 0)
+        local look = cam.CFrame.LookVector
+        local right = cam.CFrame.RightVector
+
+        if UserInputService:IsKeyDown(Enum.KeyCode.W) then moveDir = moveDir + look end
+        if UserInputService:IsKeyDown(Enum.KeyCode.S) then moveDir = moveDir - look end
+        if UserInputService:IsKeyDown(Enum.KeyCode.A) then moveDir = moveDir - right end
+        if UserInputService:IsKeyDown(Enum.KeyCode.D) then moveDir = moveDir + right end
+        if UserInputService:IsKeyDown(Enum.KeyCode.Space) or isGoingUp then moveDir = moveDir + Vector3.new(0, 1, 0) end
+        if UserInputService:IsKeyDown(Enum.KeyCode.LeftShift) or isGoingDown then moveDir = moveDir - Vector3.new(0, 1, 0) end
+
+        if moveDir.Magnitude > 0 then
+            vel.Velocity = moveDir.Unit * 60
+        else
+            vel.Velocity = Vector3.new(0, 0, 0)
         end
     end)
 end)
@@ -445,7 +480,7 @@ RunService.RenderStepped:Connect(function()
 end)
 
 --------------------------------------------------------------------------------
--- 7. AIMBOT VÒNG TRÒN FOV (TỐC ĐỘ BÁM ĐUỔI SIÊU NHANH, KHÔNG LỖI HIỂN THỊ)
+-- 7. AIMBOT VÒNG TRÒN FOV (TỐC ĐỘ BÁM ĐUỔI CAO)
 --------------------------------------------------------------------------------
 local AimbotSection = Instance.new("Frame", Container)
 AimbotSection.BackgroundColor3 = Color3.fromRGB(22, 22, 30)
@@ -535,7 +570,6 @@ RunService.RenderStepped:Connect(function()
                 end
             end
         end
-        -- Tăng tốc độ dịch chuyển camera bám sát mục tiêu tức thì, không bị chậm khi địch chạy nhanh
         if nearestTarget then 
             Camera.CFrame = Camera.CFrame:Lerp(CFrame.new(Camera.CFrame.Position, nearestTarget.Position), 0.75)
         end
@@ -543,7 +577,7 @@ RunService.RenderStepped:Connect(function()
 end)
 
 --------------------------------------------------------------------------------
--- 8. TĂNG HITBOX ĐỎ LÊN TỚI 100 (CÓ SELECTIONBOX ĐỎ RỰC)
+-- 8. TĂNG HITBOX ĐỎ (FIX CHUẨN: ĐÁNH TRÚNG VÀ NHẬN SÁT THƯƠNG 100%)
 --------------------------------------------------------------------------------
 local HitboxSection = Instance.new("Frame", Container)
 HitboxSection.BackgroundColor3 = Color3.fromRGB(22, 22, 30)
@@ -555,7 +589,7 @@ HBText.BackgroundTransparency = 1
 HBText.Position = UDim2.new(0, 12, 0, 6)
 HBText.Size = UDim2.new(1, -24, 0, 20)
 HBText.Font = Enum.Font.GothamBold
-HBText.Text = "🔴 Hitbox Đỏ (Tùy chỉnh Max 100)"
+HBText.Text = "🔴 Hitbox Đỏ (Fixed Nhận Sát Thương)"
 HBText.TextColor3 = Color3.fromRGB(255, 255, 255)
 HBText.TextSize = 11
 HBText.TextXAlignment = Enum.TextXAlignment.Left
@@ -597,9 +631,9 @@ HBBox.FocusLost:Connect(function()
     local val = tonumber(HBBox.Text:match("[%d%.]+"))
     if val and val > 0 then
         hitboxSize = math.clamp(val, 1, 100)
-        HBBox.Text = "Size: " + hitboxSize
+        HBBox.Text = "Size: " .. hitboxSize
     else
-        HBBox.Text = "Size: " + hitboxSize
+        HBBox.Text = "Size: " .. hitboxSize
     end
 end)
 
@@ -629,8 +663,8 @@ RunService.RenderStepped:Connect(function()
                         }
                     end
                     hrp.Size = Vector3.new(hitboxSize, hitboxSize, hitboxSize)
-                    hrp.Transparency = 0.8
-                    hrp.CanCollide = false
+                    hrp.Transparency = 0.75
+                    hrp.CanCollide = true
                     
                     local box = hrp:FindFirstChild("TuanMeoRedBox")
                     if not box then
@@ -658,7 +692,7 @@ RunService.RenderStepped:Connect(function()
 end)
 
 --------------------------------------------------------------------------------
--- 9. FARM KILL (BÁM THEO ĐỊCH, DƯỚI ĐẤT, ÚP MẶT LÊN TRỜI, VÔ HIỆU HÓA ĐỊCH ĐÁNH/BẮN)
+-- 9. FARM KILL (BÁM SÁT, NẰM NGANG, NGỬA MẶT THẲNG LÊN TRỜI, KHÓA KẺ ĐỊCH)
 --------------------------------------------------------------------------------
 local FarmKillSection = Instance.new("Frame", Container)
 FarmKillSection.BackgroundColor3 = Color3.fromRGB(22, 22, 30)
@@ -666,7 +700,7 @@ FarmKillSection.Size = UDim2.new(1, 0, 0, 50)
 Instance.new("UICorner", FarmKillSection).CornerRadius = UDim.new(0, 8)
 
 local farmKillActive = false
-local FarmKillBtn = createToggleBtn(FarmKillSection, "🥊 Farm Kill (Bám Sát Địch - Úp Mặt Lên)", UDim2.new(0, 12, 0, 10), UDim2.new(1, -24, 0, 30))
+local FarmKillBtn = createToggleBtn(FarmKillSection, "🥊 Farm Kill (Bám Sát - Ngửa Mặt Lên)", UDim2.new(0, 12, 0, 10), UDim2.new(1, -24, 0, 30))
 
 FarmKillBtn.MouseButton1Click:Connect(function()
     farmKillActive = not farmKillActive
@@ -679,7 +713,6 @@ task.spawn(function()
         task.wait(0.05)
         if farmKillActive then
             pcall(function()
-                -- Nếu đang máu yếu và bật cứu mệnh thì tạm dừng farm kill để cứu mệnh trước
                 local myChar = LocalPlayer.Character
                 local myHum = myChar and myChar:FindFirstChildOfClass("Humanoid")
                 local holdingTool = myChar and myChar:FindFirstChildOfClass("Tool") ~= nil
@@ -700,7 +733,6 @@ task.spawn(function()
                             
                             if not isSafe then
                                 local farmStartTime = tick()
-                                -- Vòng lặp bám theo từng bước chạy của địch, giữ chặt vị trí dưới chân và ngửa mặt lên
                                 while tHum.Health > 0 and farmKillActive and target.Parent and target.Character:FindFirstChild("HumanoidRootPart") and (tick() - farmStartTime < 12) do
                                     task.wait(0.016)
                                     pcall(function()
@@ -711,8 +743,8 @@ task.spawn(function()
                                         if myRoot and tRoot and currentMyHum then
                                             currentMyHum.PlatformStand = true
                                             myRoot.Velocity = Vector3.new(0, 0, 0)
-                                            -- Di chuyển cùng nhịp độ với nhân vật địch, bám sát dưới chân và úp mặt ngửa lên trời (-90 độ)
-                                            myRoot.CFrame = tRoot.CFrame * CFrame.new(0, -3.5, 0) * CFrame.Angles(math.rad(-90), 0, 0)
+                                            -- Dịch chuyển sát chân, nằm ngang úp mặt ngửa thẳng lên trời (math.rad(90) trục X)
+                                            myRoot.CFrame = tRoot.CFrame * CFrame.new(0, -3.5, 0) * CFrame.Angles(math.rad(90), 0, 0)
                                             
                                             local tool = currentMyChar and currentMyChar:FindFirstChildOfClass("Tool")
                                             if tool then
@@ -813,7 +845,7 @@ local function refreshServerList()
                 idLbl.Position = UDim2.new(0, 10, 0, 20)
                 idLbl.Size = UDim2.new(1, -50, 0, 16)
                 idLbl.Font = Enum.Font.Gotham
-                idLbl.Text = "ID: " + p.UserId
+                idLbl.Text = "ID: " .. p.UserId
                 idLbl.TextColor3 = Color3.fromRGB(150, 150, 170)
                 idLbl.TextSize = 10
                 idLbl.TextXAlignment = Enum.TextXAlignment.Left
@@ -848,4 +880,4 @@ TeleBtn.MouseButton1Click:Connect(function()
     end)
 end)
 
-print("🐱 TUẤN MÈO - ULTIMATE MOBILE EDITION ĐÃ SẴN SÀNG!")
+print("🐱 TUẤN MÈO - ULTIMATE GOD FIX ĐÃ SẴN SÀNG!")
